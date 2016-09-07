@@ -13,13 +13,15 @@
           cider-any-uruk-user     (second connection)
           cider-any-uruk-password (third connection))))
 
-(defvar xdmp-document-load/history) nil
+
+(defvar xdmp-document-history nil)
+
 (defun xdmp-document-load (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-load/history) "")) nil
-                 'xdmp-document-load/history
-                 (car xdmp-document-load/history))))
+    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
   (cider-any-string (format "
 xquery version \"1.0-ml\";
@@ -37,14 +39,13 @@ xdmp:document-load(\"%s\",
                               "")
                             (buffer-name))))
 
-(defvar xdmp-document-delete/history nil)
 (defun xdmp-document-delete (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-delete/history) ""))
+    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) ""))
                  nil
-                 'xdmp-document-delete/history
-                 (car xdmp-document-delete/history))))
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
   (cider-any-string (format "
 xquery version \"1.0-ml\";
@@ -56,14 +57,13 @@ xdmp:document-delete(\"%s%s\")
                               "")
                             (buffer-name))))
 
-(defvar xdmp-list-documents/history nil)
 (defun xdmp-list-documents (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-list-documents/history) ""))
+    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) ""))
                  nil
-                 'xdmp-list-documents/history
-                 (car xdmp-list-documents/history))))
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
   (cider-any-string (format "
 xquery version \"1.0-ml\";
@@ -73,14 +73,13 @@ for $d in xdmp:directory(\"%s\",\"infinity\")
 "
                             (file-name-as-directory directory))))
 
-(defvar xdmp-show/history nil)
 (defun xdmp-show (&optional uri)
   (interactive
    (list
-    (read-string (format "URI [%s]: " (or (car xdmp-show/history) ""))
+    (read-string (format "URI [%s]: " (or (car xdmp-document-history) ""))
                  nil
-                 'xdmp-show/history
-                 (car xdmp-show/history))))
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
   (cider-any-string (format "
 xquery version \"1.0-ml\";
