@@ -1,3 +1,6 @@
+(provide 'xdmp-selector)
+(require 'xdmp-methods)
+
 ;;;; Buffer selector
 
 (defvar xdbc-selector-methods nil
