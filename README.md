@@ -8,7 +8,7 @@ Get xquery-mode, cider-any, and page-break-lines and put them in ~/src/emacs/
 ```
   git clone https://github.com/xquery-mode/cider-any.git
   git clone https://github.com/xquery-mode/xquery-mode.git
-  git clonehttps://github.com/purcell/page-break-lines.git
+  git clone https://github.com/purcell/page-break-lines.git
 ```
 
 Put this in your ~/.emacs or ~/.emacs.d/init.el:
@@ -23,6 +23,11 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'mark-logic)
+```
+
+Get uruk and put it into your code directory, e.g. ~/src/
+```
+  git clone https://github.com/daveliepmann/uruk.git
 ```
 
 ## Usage
