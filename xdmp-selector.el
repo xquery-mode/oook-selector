@@ -80,11 +80,11 @@ switch-to-buffer."
 
 
 (def-xdbc-selector-method ?l
-  "upload a document"
+  "list documents"
   (call-interactively 'xdmp-list-documents))
 
 (def-xdbc-selector-method ?L
-  "upload a document to other db"
+  "list documents to other db"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-list-documents))
 
