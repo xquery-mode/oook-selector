@@ -1,6 +1,8 @@
 (provide 'xdmp-selector)
 (require 'xdmp-methods)
 
+;; based on slime-selector
+
 ;;;; Buffer selector
 
 (defvar xdbc-selector-methods nil
