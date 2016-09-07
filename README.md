@@ -30,7 +30,7 @@ Get uruk and put it into your code directory, e.g. ~/src/
   git clone https://github.com/daveliepmann/uruk.git
 ```
 
-## Usage
+## Set up leiningen project
 
 Start cider repl in a leiningen project. The Uruk library must be
 pinned in the project.clj in the dependencies section.
@@ -52,5 +52,27 @@ cat > uruk-gw/project.clj <<__EOL__
   :profiles {:uberjar {:aot :all}})
 __EOL__
 ```
-Than cider-jack-in to that project and try the xdbc-selecter by entering C-cm;
-there is help if you press '?' afterwards
+
+## Usage
+
+Currently the database/xdbc connections are to be configured by changing
+the function xdmp-select-db in the beginning of mark-logic/xdmp-methods.el.
+You configure a primary connection and a seconderay one (the "other" db).
+
+Than cider-jack-in to a uruk project and try the xdbc-selecter by entering C-cm
+There is help if you press '?' afterwards.
+
+With  C-cm q  you can just evaluate a query from a minibuffer.
+
+All other commands have usually a lowercase version for the primary db, and
+a UPPERCASE one for the other db.
+ C-cm l / L  -  list documents
+ C-cm u / U  -  upload a documents (by xdmp:document-load)
+ C-cm d / D  -  delete a documents (by xdmp:document-delete)
+
+For upload and delete document you should have the file that
+is to be transfered or delete open in a buffer. If you fire
+the command the filename will be taken from the buffer and
+you will be interactively queried to enter a directory path.
+The file will be uploaded with a uri of <directory>/<filename>.
+Delete works analogously.
