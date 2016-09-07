@@ -1,3 +1,5 @@
+(provide 'xdmp-methods)
+
 (defun xdmp-select-db (sel)
   "switch between two DBs." ;; this is clearly a hack
   (interactive "p")
@@ -9,6 +11,7 @@
           cider-any-uruk-user "admin"
           cider-any-uruk-password "admin")))
 
+(defvar xdmp-document-load/history nil)
 (defun xdmp-document-load (&optional directory)
   (interactive
    (list
@@ -33,6 +36,7 @@ xdmp:document-load(\"%s\",
                               "")
                             (buffer-name))))
 
+(defvar xdmp-document-delete/history nil)
 (defun xdmp-document-delete (&optional directory)
   (interactive
    (list
@@ -52,6 +56,7 @@ xdmp:document-delete(\"%s%s\")
                               "")
                             (buffer-name))))
 
+(defvar xdmp-list-documents/history nil)
 (defun xdmp-list-documents (&optional directory)
   (interactive
    (list
