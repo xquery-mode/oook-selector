@@ -81,6 +81,16 @@ switch-to-buffer."
   (call-interactively 'cider-any-string))
 
 
+(def-xdbc-selector-method ?s
+  "show document"
+  (call-interactively 'xdmp-show))
+
+(def-xdbc-selector-method ?S
+  "show document to other db"
+  (setq current-prefix-arg '(4)) ; C-u
+  (call-interactively 'xdmp-show))
+
+
 (def-xdbc-selector-method ?l
   "list documents"
   (call-interactively 'xdmp-list-documents))

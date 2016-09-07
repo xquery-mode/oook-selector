@@ -13,7 +13,7 @@
           cider-any-uruk-user     (second connection)
           cider-any-uruk-password (third connection))))
 
-(defvar xdmp-document-load/history nil)
+(defvar xdmp-document-load/history) nil
 (defun xdmp-document-load (&optional directory)
   (interactive
    (list
@@ -21,7 +21,6 @@
                  'xdmp-document-load/history
                  (car xdmp-document-load/history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (setq xdmp-document-load/last-dir directory)
   (cider-any-string (format "
 xquery version \"1.0-ml\";
 xdmp:document-load(\"%s\",
@@ -47,7 +46,6 @@ xdmp:document-load(\"%s\",
                  'xdmp-document-delete/history
                  (car xdmp-document-delete/history))))
   (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (setq xdmp-document-delete/last-dir directory)
   (cider-any-string (format "
 xquery version \"1.0-ml\";
 xdmp:document-delete(\"%s%s\")
@@ -74,6 +72,21 @@ for $d in xdmp:directory(\"%s\",\"infinity\")
 
 "
                             (file-name-as-directory directory))))
+
+(defvar xdmp-show/history nil)
+(defun xdmp-show (&optional uri)
+  (interactive
+   (list
+    (read-string (format "URI [%s]: " (or (car xdmp-show/history) ""))
+                 nil
+                 'xdmp-show/history
+                 (car xdmp-show/history))))
+  (xdmp-select-db (prefix-numeric-value current-prefix-arg))
+  (cider-any-string (format "
+xquery version \"1.0-ml\";
+doc(\"%s\")
+"
+                            uri)))
 
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)
