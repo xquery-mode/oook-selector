@@ -1,15 +1,17 @@
 (provide 'xdmp-methods)
 
+(defvar cider-any-uruk-connections
+  '(("xdbc://localhost:8021/" "admin" "admin")
+    ("xdbc://localhost:8022/" "admin" "admin")))
+
 (defun xdmp-select-db (sel)
   "switch between two DBs." ;; this is clearly a hack
   (interactive "p")
-  (if (= sel 1)
-      (setq cider-any-uruk-uri "xdbc://localhost:8021/"
-            cider-any-uruk-user "admin"
-            cider-any-uruk-password "admin")
-    (setq cider-any-uruk-uri "xdbc://localhost:8022/"
-          cider-any-uruk-user "admin"
-          cider-any-uruk-password "admin")))
+  (let ((connection (nth (if (= sel 1) 0 1)
+                         cider-any-uruk-connections)))
+    (setq cider-any-uruk-uri      (first connection)
+          cider-any-uruk-user     (second connection)
+          cider-any-uruk-password (third connection))))
 
 (defvar xdmp-document-load/history nil)
 (defun xdmp-document-load (&optional directory)

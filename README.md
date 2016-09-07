@@ -23,6 +23,10 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'mark-logic)
+
+(setq cider-any-uruk-connections ;; list of two connections
+  '(("xdbc://localhost:8021/" "admin" "admin")
+    ("xdbc://localhost:8022/" "admin" "admin")))
 ```
 
 Get uruk and put it into your code directory, e.g. ~/src/
@@ -55,8 +59,7 @@ __EOL__
 
 ## Usage
 
-Currently the database/xdbc connections are to be configured by changing
-the function xdmp-select-db in the beginning of mark-logic/xdmp-methods.el.
+Configure the database/xdbc connections in your ~/.emacs file (see above).
 You configure a primary connection and a seconderay one (the "other" db).
 
 Than cider-jack-in to a uruk project and try the xdbc-selecter by entering C-cm
