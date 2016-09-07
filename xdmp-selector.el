@@ -107,8 +107,3 @@ switch-to-buffer."
   "delete a document to other db"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-document-delete))
-
-
-;;; register selector as global key binding
-
-(global-set-key "\C-cm" 'xdbc-selector)
