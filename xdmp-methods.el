@@ -9,9 +9,10 @@
   (interactive "p")
   (let ((connection (nth (if (= sel 1) 0 1)
                          cider-any-uruk-connections)))
-    (setq cider-any-uruk-uri      (first connection)
-          cider-any-uruk-user     (second connection)
-          cider-any-uruk-password (third connection))))
+    (setq cider-any-uruk-uri          (first connection)
+          cider-any-uruk-user         (second connection)
+          cider-any-uruk-password     (third connection)
+          cider-any-uruk-content-base (nth 4 connection))))
 
 
 (defvar xdmp-document-history nil)
