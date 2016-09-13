@@ -12,7 +12,7 @@
     (setq cider-any-uruk-uri          (first connection)
           cider-any-uruk-user         (second connection)
           cider-any-uruk-password     (third connection)
-          cider-any-uruk-content-base (nth 4 connection))))
+          cider-any-uruk-content-base (nth 3 connection))))
 
 
 (defvar xdmp-document-history nil)
