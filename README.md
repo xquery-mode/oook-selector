@@ -77,9 +77,9 @@ With  C-cm q  you can just evaluate a query from a minibuffer.
 
 All other commands have usually a lowercase version for the primary db, and
 a UPPERCASE one for the other db.
- C-cm l / L  -  list documents
- C-cm u / U  -  upload a documents (by xdmp:document-load)
- C-cm d / D  -  delete a documents (by xdmp:document-delete)
+- C-cm l / L  -  list documents
+- C-cm u / U  -  upload a documents (by xdmp:document-load)
+- C-cm d / D  -  delete a documents (by xdmp:document-delete)
 
 For upload and delete document you should have the file that
 is to be transfered or delete open in a buffer. If you fire
