@@ -4,7 +4,7 @@ This is the beginning of convenience tools for interacting with MarkLogic.
 
 # Warning
 
-This is not even alpha but just some very early work and might change a lot.
+It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
@@ -76,7 +76,7 @@ There is help if you press '?' afterwards.
 With  C-cm q  you can just evaluate a query from a minibuffer.
 
 All other commands have usually a lowercase version for the primary db, and
-a UPPERCASE one for the other db.
+a UPPERCASE one for the other db:
 - C-cm l / L  -  list documents
 - C-cm u / U  -  upload a documents (by xdmp:document-load)
 - C-cm d / D  -  delete a documents (by xdmp:document-delete)
