@@ -1,7 +1,4 @@
-(provide 'mark-logic)
-
-(require 'nxml-pretty-format)
-(global-set-key (kbd "C-c C-p") 'nxml-pretty-format)
+(provide 'xdmp-setup)
 
 (require 'xquery-mode)
 (require 'cider-any-uruk)
