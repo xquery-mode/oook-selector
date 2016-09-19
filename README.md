@@ -8,10 +8,10 @@ This is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
-Get xdmp-selector, xquery-mode, cider-any, and page-break-lines and put them
+Get xdbc-selector, xquery-mode, cider-any, and page-break-lines and put them
 into a directory ~/src/emacs/
 ```
-  git clone https://github.com/xquery-mode/xdmp-selector.git
+  git clone https://github.com/xquery-mode/xdbc-selector.git
   git clone https://github.com/xquery-mode/cider-any.git
   git clone https://github.com/xquery-mode/xquery-mode.git
   git clone https://github.com/purcell/page-break-lines.git
@@ -24,17 +24,17 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
-(require 'xdmp-setup)
+(require 'xdbc-setup)
 
 (setq cider-any-uruk-connections ;; list of two connections
   '(("xdbc://localhost:8021/" "admin" "admin")
     ("xdbc://localhost:8022/" "admin" "admin")))
 ```
-xdmp-setup does some initialization in addition to just loading the
-xdmp-selector.  If you want to do this step yourself and just load the
-bare xdmp-selector replace the require line by:
+xdbc-setup does some initialization in addition to just loading the
+xdbc-selector.  If you want to do this step yourself and just load the
+bare xdbc-selector replace the require line by:
 ```
-(require 'xdmp-selector)
+(require 'xdbc-selector)
 ```
 
 Get uruk and put it into your code directory, e.g. ~/src/

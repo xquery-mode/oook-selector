@@ -1,4 +1,4 @@
-(provide 'xdmp-setup)
+(provide 'xdbc-setup)
 
 (require 'xquery-mode)
 (require 'cider-any-uruk)
@@ -6,6 +6,6 @@
 
 (require 'cider-any-uruk-pprint)
 
-(require 'xdmp-selector)
+(require 'xdbc-selector)
 ;;; register selector as global key binding
 (global-set-key "\C-cm" 'xdbc-selector)

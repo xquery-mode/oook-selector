@@ -1,5 +1,5 @@
-(provide 'xdmp-selector)
 (require 'xdmp-methods)
+(provide 'xdbc-selector)
 
 ;; based on slime-selector
 
