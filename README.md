@@ -1,8 +1,8 @@
-# Rationale
+# xdbc selector
 
 This is the beginning of convenience tools for interacting with MarkLogic.
 
-# Warning
+## Warning
 
 It is not even alpha but just some very early work and might change a lot.
 
