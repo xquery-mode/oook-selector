@@ -93,14 +93,16 @@ switch-to-buffer."
   (xdbc-selector)
   (current-buffer))
 
-(cl-pushnew (list ?4 "Select in other window" (lambda () (xdbc-selector t)))
-            xdbc-selector-methods :key #'car)
+;; (cl-pushnew (list ?4 "Select in other window" (lambda () (xdbc-selector t)))
+;;             xdbc-selector-methods :key #'car)
 
 (def-xdbc-selector-method ?q "Quit / abort"
   (top-level))
 
 
 ;;; custom methods
+
+;;;;
 
 (def-xdbc-selector-method ?x
   "Evaluate an xquery from minibuffer"
@@ -112,15 +114,7 @@ switch-to-buffer."
   (call-interactively 'xdmp-query))
 
 
-(def-xdbc-selector-method ?s
-  "Show document"
-  (call-interactively 'xdmp-show))
-
-(def-xdbc-selector-method ?S
-  "Show document in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-show))
-
+;;;; document management
 
 (def-xdbc-selector-method ?l
   "List documents"
@@ -130,6 +124,16 @@ switch-to-buffer."
   "List documents in the modules database"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-list-documents))
+
+
+(def-xdbc-selector-method ?s
+  "Show document"
+  (call-interactively 'xdmp-show))
+
+(def-xdbc-selector-method ?S
+  "Show document in the modules database"
+  (setq current-prefix-arg '(4)) ; C-u
+  (call-interactively 'xdmp-show))
 
 
 (def-xdbc-selector-method ?u
@@ -152,17 +156,19 @@ switch-to-buffer."
   (call-interactively 'xdmp-document-delete))
 
 
+;;;; database selection
+
 (def-xdbc-selector-method ?c ;; "choose"
   "Choose/select database within current session/connection "
   (call-interactively 'xdmp-select-database))
 
-(def-xdbc-selector-method ?,
-  "Select modules database of the server"
-  (xdmp-select-modules-database))
-
 (def-xdbc-selector-method ?.
   "Select default database of the server"
   (xdmp-select-default-database))
+
+(def-xdbc-selector-method ?,
+  "Select modules database of the server"
+  (xdmp-select-modules-database))
 
 (def-xdbc-selector-method ?-
   "Show with database is currently used"
