@@ -1,21 +1,71 @@
 (provide 'xdmp-methods)
 
-(defvar cider-any-uruk-connections
-  '(("xdbc://localhost:8021/" "admin" "admin")
-    ("xdbc://localhost:8022/" "admin" "admin")))
 
-(defun xdmp-select-db (sel)
-  "switch between two DBs." ;; this is clearly a hack
-  (interactive "p")
-  (let ((connection (nth (if (= sel 1) 0 1)
-                         cider-any-uruk-connections)))
-    (setq cider-any-uruk-uri          (first connection)
-          cider-any-uruk-user         (second connection)
-          cider-any-uruk-password     (third connection)
-          cider-any-uruk-content-base (nth 3 connection))))
+;;;; xdmp interface functions to query for databases
 
+(defun xdmp-get-current-database ()
+  ;; should be the same as in variable 'cider-any-uruk-content-base'
+  (car (cider-any-string->list "xdmp:database-name(xdmp:database())")))
+
+(defun xdmp-get-default-database ()
+  (car (cider-any-string->list "xdmp:database-name(xdmp:server-database(xdmp:server()))")))
+
+(defun xdmp-get-modules-database ()
+  (car (cider-any-string->list "xdmp:database-name(xdmp:modules-database())")))
+
+(defun xdmp-get-databases ()
+  (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
+
+
+;;;; functions to select databases
+
+(defun xdmp-select-database (content-base)
+  ;; also shows all databases because of the completion feature
+  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-default-database) 0))))
+  (setq cider-any-uruk-content-base content-base))
+
+(defun xdmp-select-default-database ()
+  (interactive)
+  (setq cider-any-uruk-content-base (xdmp-get-default-database)))
+
+(defun xdmp-select-modules-database ()
+  (interactive)
+  (setq cider-any-uruk-content-base (xdmp-get-modules-database)))
+
+(defun xdmp-show-current-database ()
+  (interactive)
+  (message (xdmp-get-current-database)))
+
+
+;;;; helper function to temporarily switch to the modules databse
+
+(defvar xdmp-previous-database-stack nil)
+(defun xdmp-maybe-switch-to-modules-database () ;; silently uses the numerical prefix
+  (let ((arg (prefix-numeric-value current-prefix-arg)))
+    (when (= arg 4)
+      (push (xdmp-get-current-database) xdmp-previous-database-stack)
+      (xdmp-select-modules-database))))
+(defun xdmp-maybe-switch-to-previous-database ()
+  (let ((prev (pop xdmp-previous-database-stack)))
+    (when prev
+      (xdmp-select-database prev))))
+
+
+;;;; main query function that wraps cider-any-eval
+
+;; temporarily switches to modules database (using helper functions) when called with C-u (that is numerical prefix of 4)
+(defun xdmp-query (string)
+  "Eval an xquery -- temporarily switches to modules-database when called with C-u"
+  (interactive "sQuery: ")
+  (xdmp-maybe-switch-to-modules-database)
+  (cider-any-eval string)
+  (xdmp-maybe-switch-to-previous-database))
+
+
+;;; document load / delete / list / show
 
 (defvar xdmp-document-history nil)
+;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
 (defun xdmp-document-load (&optional directory)
   (interactive
@@ -23,22 +73,19 @@
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (cider-any-string (format "
+  (xdmp-query (format "
 xquery version \"1.0-ml\";
 xdmp:document-load(\"%s\",
                    <options xmlns=\"xdmp:document-load\">
                      <uri>%s%s</uri>
                      <repair>none</repair>
                      <permissions>{xdmp:default-permissions()}</permissions>
-                  </options>)
-
-"
-                            (buffer-file-name)
-                            (if (not (string-equal "" directory))
-                                (file-name-as-directory directory)
-                              "")
-                            (buffer-name))))
+                  </options>)"
+                      (buffer-file-name)
+                      (if (not (string-equal "" directory))
+                          (file-name-as-directory directory)
+                        "")
+                      (buffer-name))))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
@@ -47,16 +94,13 @@ xdmp:document-load(\"%s\",
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (cider-any-string (format "
+  (xdmp-query (format "
 xquery version \"1.0-ml\";
-xdmp:document-delete(\"%s%s\")
-
-"
-                            (if (not (string-equal "" directory))
-                                (file-name-as-directory directory)
-                              "")
-                            (buffer-name))))
+xdmp:document-delete(\"%s%s\")"
+                      (if (not (string-equal "" directory))
+                          (file-name-as-directory directory)
+                        "")
+                      (buffer-name))))
 
 (defun xdmp-list-documents (&optional directory)
   (interactive
@@ -65,14 +109,11 @@ xdmp:document-delete(\"%s%s\")
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (cider-any-string (format "
+  (xdmp-query (format "
 xquery version \"1.0-ml\";
 for $d in xdmp:directory(\"%s\",\"infinity\")
-  return xdmp:node-uri($d)
-
-"
-                            (file-name-as-directory directory))))
+  return xdmp:node-uri($d)"
+                      (file-name-as-directory directory))))
 
 (defun xdmp-show (&optional uri)
   (interactive
@@ -81,12 +122,10 @@ for $d in xdmp:directory(\"%s\",\"infinity\")
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (xdmp-select-db (prefix-numeric-value current-prefix-arg))
-  (cider-any-string (format "
+  (xdmp-query (format "
 xquery version \"1.0-ml\";
-doc(\"%s\")
-"
-                            uri)))
+doc(\"%s\")"
+                      uri)))
 
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)

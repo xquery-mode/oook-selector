@@ -96,52 +96,77 @@ switch-to-buffer."
 (cl-pushnew (list ?4 "Select in other window" (lambda () (xdbc-selector t)))
             xdbc-selector-methods :key #'car)
 
-(def-xdbc-selector-method ?q "Abort."
+(def-xdbc-selector-method ?q "Quit / abort"
   (top-level))
 
 
 ;;; custom methods
 
-(def-xdbc-selector-method ?q
-  "evaluate a query from minibuffer"
-  (call-interactively 'cider-any-string))
+(def-xdbc-selector-method ?x
+  "Evaluate an xquery from minibuffer"
+  (call-interactively 'xdmp-query))
+
+(def-xdbc-selector-method ?X
+  "Evaluate an xquery from minibuffer in the modules database"
+  (setq current-prefix-arg '(4)) ; C-u
+  (call-interactively 'xdmp-query))
 
 
 (def-xdbc-selector-method ?s
-  "show document"
+  "Show document"
   (call-interactively 'xdmp-show))
 
 (def-xdbc-selector-method ?S
-  "show document to other db"
+  "Show document in the modules database"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-show))
 
 
 (def-xdbc-selector-method ?l
-  "list documents"
+  "List documents"
   (call-interactively 'xdmp-list-documents))
 
 (def-xdbc-selector-method ?L
-  "list documents to other db"
+  "List documents in the modules database"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-list-documents))
 
 
 (def-xdbc-selector-method ?u
-  "upload a document"
+  "Upload a document"
   (call-interactively 'xdmp-document-load))
 
 (def-xdbc-selector-method ?U
-  "upload a document to other db"
+  "Upload a document in the modules database"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-document-load))
 
 
 (def-xdbc-selector-method ?d
-  "delete a document"
+  "Delete a document"
   (call-interactively 'xdmp-document-delete))
 
 (def-xdbc-selector-method ?D
-  "delete a document to other db"
+  "Delete a document in the modules database"
   (setq current-prefix-arg '(4)) ; C-u
   (call-interactively 'xdmp-document-delete))
+
+
+(def-xdbc-selector-method ?c ;; "choose"
+  "Choose/select database within current session/connection "
+  (call-interactively 'xdmp-select-database))
+
+(def-xdbc-selector-method ?,
+  "Select modules database of the server"
+  (xdmp-select-modules-database))
+
+(def-xdbc-selector-method ?.
+  "Select default database of the server"
+  (xdmp-select-default-database))
+
+(def-xdbc-selector-method ?-
+  "Show with database is currently used"
+  (xdmp-show-current-database))
+(def-xdbc-selector-method ?/
+  "Show with database is currently used"
+  (xdmp-show-current-database))
