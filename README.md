@@ -25,10 +25,6 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'xdbc-setup)
-
-(setq cider-any-uruk-connections ;; list of two connections
-  '(("xdbc://localhost:8021/" "admin" "admin")
-    ("xdbc://localhost:8022/" "admin" "admin")))
 ```
 xdbc-setup does some initialization in addition to just loading the
 xdbc-selector.  If you want to do this step yourself and just load the
@@ -67,21 +63,40 @@ __EOL__
 
 ## Usage
 
-Configure the database/xdbc connections in your ~/.emacs file (see above).
-You configure a primary connection and a seconderay one (the "other" db).
-
 Than cider-jack-in to a uruk project and try the xdbc-selecter by entering C-cm
 There is help if you press '?' afterwards.
 
-With  C-cm q  you can just evaluate a query from a minibuffer.
+With  C-c m x  you can just evaluate an xquery from a minibuffer.
 
-All other commands have usually a lowercase version for the primary db, and
-a UPPERCASE one for the other db:
-- C-cm l / L  -  list documents
-- C-cm u / U  -  upload a documents (by xdmp:document-load)
-- C-cm d / D  -  delete a documents (by xdmp:document-delete)
+All other commands have usually a lowercase version for the current database, and
+a UPPERCASE one for the modules database of the current session/connection.
 
-For upload and delete document you should have the file that
+### Complete list of available selector methods:
+
+- general methods:
+  - C-c m ? - Selector help buffer
+  - C-c m q - Quit / abort
+- simple xquery evaluation:
+  - C-c m x - Evaluate an xquery from minibuffer
+  - C-c m X - Evaluate an xquery from minibuffer in the modules database
+- document management:
+  - C-c m l - List documents
+  - C-c m L - List documents in the modules database
+  - C-c m s - Show document
+  - C-c m S - Show document in the modules database
+  - C-c m u - Upload a document
+  - C-c m U - Upload a document in the modules database
+  - C-c m d - Delete a document
+  - C-c m D - Delete a document in the modules database
+- database selection:
+  - C-c m c - Choose/select database within current session/connection
+  - C-c m . - Select default database of the server
+  - C-c m , - Select modules database of the server
+  - C-c m - - Show with database is currently used
+  - C-c m / - Show with database is currently used
+
+#### Note on upload and delete document methods
+To use upload and delete document you should have the file that
 is to be transfered or delete open in a buffer. If you fire
 the command the filename will be taken from the buffer and
 you will be interactively queried to enter a directory path.
