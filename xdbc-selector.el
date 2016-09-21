@@ -81,7 +81,7 @@ switch-to-buffer."
                           (cl-remove ,key xdbc-selector-methods :key #'car))
                     #'< :key #'car))))
 
-(def-xdbc-selector-method ?? "Selector help buffer."
+(def-xdbc-selector-method ?? "Selector help buffer"
   (ignore-errors (kill-buffer "*Select Help*"))
   (with-current-buffer (get-buffer-create "*Select Help*")
     (insert "Select Methods:\n\n")
@@ -102,7 +102,7 @@ switch-to-buffer."
 
 ;;; custom methods
 
-;;;;
+;;;; simple xquery evaluation
 
 (def-xdbc-selector-method ?x
   "Evaluate an xquery from minibuffer"
