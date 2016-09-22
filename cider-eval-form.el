@@ -1,10 +1,10 @@
-(defun cider-read-and-eval (&optional value)
+
+(defun cider-eval-form (form &optional namespace)
   "Read a sexp from the minibuffer and output its result to the echo area.
-If VALUE is non-nil, it is inserted into the minibuffer as initial input."
+If NAMESPACE is non-nil, it is sent to cider as current namespace."
   (interactive)
-  (let* ((form (cider-read-from-minibuffer "Clojure Eval: " value))
-         (override cider-interactive-eval-override)
-         (ns-form (if (cider-ns-form-p form) "" (format "(ns %s)" (cider-current-ns)))))
+  (let* ((override cider-interactive-eval-override)
+         (ns-form (format "(ns %s)" (or namespace (cider-current-ns)))))
     (with-current-buffer (get-buffer-create cider-read-eval-buffer)
       (erase-buffer)
       (clojure-mode)
