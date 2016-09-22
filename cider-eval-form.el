@@ -1,0 +1,15 @@
+(defun cider-read-and-eval (&optional value)
+  "Read a sexp from the minibuffer and output its result to the echo area.
+If VALUE is non-nil, it is inserted into the minibuffer as initial input."
+  (interactive)
+  (let* ((form (cider-read-from-minibuffer "Clojure Eval: " value))
+         (override cider-interactive-eval-override)
+         (ns-form (if (cider-ns-form-p form) "" (format "(ns %s)" (cider-current-ns)))))
+    (with-current-buffer (get-buffer-create cider-read-eval-buffer)
+      (erase-buffer)
+      (clojure-mode)
+      (unless (string= "" ns-form)
+        (insert ns-form "\n\n"))
+      (insert form)
+      (let ((cider-interactive-eval-override override))
+        (cider-interactive-eval form)))))
