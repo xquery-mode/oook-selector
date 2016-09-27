@@ -2,21 +2,6 @@
 (require 'cider-any-uruk)
 (require 'cider-eval-form)
 
-;;;; xdmp interface functions to query for databases
-
-(defun xdmp-get-current-database ()
-  ;; should be the same as in variable 'cider-any-uruk-content-base'
-  (car (cider-any-string->list "xdmp:database-name(xdmp:database())")))
-
-(defun xdmp-get-default-database ()
-  (car (cider-any-string->list "xdmp:database-name(xdmp:server-database(xdmp:server()))")))
-
-(defun xdmp-get-modules-database ()
-  (car (cider-any-string->list "xdmp:database-name(xdmp:modules-database())")))
-
-(defun xdmp-get-databases ()
-  (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
-
 
 ;;;; functions to retrieve config from Clojure
 
@@ -78,6 +63,42 @@
   (xdmp-set-server/LW-conf :rest-server))
 
 
+;;;; xdmp interface functions to query for databases
+
+(defun xdmp-get-current-database ()
+  ;; should be the same as in variable 'cider-any-uruk-content-base'
+  (car (cider-any-string->list "xdmp:database-name(xdmp:database())")))
+
+(defun xdmp-get-default-database ()
+  (car (cider-any-string->list "xdmp:database-name(xdmp:server-database(xdmp:server()))")))
+
+(defun xdmp-get-modules-database ()
+  (car (cider-any-string->list "xdmp:database-name(xdmp:modules-database())")))
+
+(defun xdmp-get-databases ()
+  (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
+
+
+;;;; functions to encapsulate the REST server for Clojure
+
+(defun xdmp-maybe-add-current-database (server)
+  (if (plist-member server :database)
+      server
+    (append server (list :database (xdmp-get-current-database)))))
+
+(defun xdmp-rest-connection->clj ()
+  (cider-any-uruk-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
+
+;; old method to directly use the cider-any-uruk connection
+(defun xdmp-uruk-connection->clj-map ()
+  (format "{:host \"%s\" :port \"%s\" :user \"%s\" :password \"%s\" :database \"%s\"}"
+          cider-any-uruk-host
+          cider-any-uruk-port
+          cider-any-uruk-user
+          cider-any-uruk-password
+          (or cider-any-uruk-content-base (xdmp-get-current-database))))
+
+
 ;;;; functions to select databases
 
 (defun xdmp-select-database (content-base)
@@ -127,26 +148,6 @@
 
 (defvar xdmp-document-history nil)
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
-
-
-;;;; functions to encapsulate the REST server for Clojure
-
-(defun xdmp-maybe-add-current-database (server)
-  (if (plist-member server :database)
-      server
-    (append server (list :database (xdmp-get-current-database)))))
-
-(defun xdmp-rest-connection->clj ()
-  (cider-any-uruk-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
-
-;; old method to directly use the cider-any-uruk connection
-(defun xdmp-uruk-connection->clj-map ()
-  (format "{:host \"%s\" :port \"%s\" :user \"%s\" :password \"%s\" :database \"%s\"}"
-          cider-any-uruk-host
-          cider-any-uruk-port
-          cider-any-uruk-user
-          cider-any-uruk-password
-          (or cider-any-uruk-content-base (xdmp-get-current-database))))
 
 ;; load document using xquery
 (defun xdmp-document-load (&optional directory)
