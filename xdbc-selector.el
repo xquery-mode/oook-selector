@@ -114,10 +114,20 @@ switch-to-buffer."
 
 
 ;;;; LW configuration service
+;; (Just ignore if you don't have such a service or don't know what it is.)
 
 (def-xdbc-selector-method ?!
-  "Get session/connection config from LW configuration service"
-  (call-interactively 'get-config/LW-conf))
+  "Get default session/connection config for XDBC and REST server from LW configuration service"
+  (xdmp-set-servers/LW-conf))
+
+(def-xdbc-selector-method ?g
+  "Get session/connection config for XDBC server from LW configuration service"
+  (call-interactively 'xdmp-set-server/LW-conf))
+
+(def-xdbc-selector-method ?G
+  "Get session/connection config for REST server from LW configuration service"
+  (setq current-prefix-arg '(4)) ; C-u
+  (call-interactively 'xdmp-set-server/LW-conf))
 
 
 ;;;; document management

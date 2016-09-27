@@ -18,24 +18,64 @@
   (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
 
 
-;;;; functions to retrieve config from clojure
+;;;; functions to retrieve config from Clojure
 
-(defun get-services/LW-conf ()
+(defvar xdmp-servers
+  '(:rest-server
+   (:host "localhost" :port "6000" :user "foo" :password "bar")
+   :xdbc-server
+   (:host "localhost" :port "7000" :user "foo" :password "bar")))
+
+(defun xdmp-get-xdbc-server ()
+  (plist-get xdmp-servers :xdbc-server))
+(defun xdmp-get-rest-server ()
+  (plist-get xdmp-servers :rest-server))
+
+(defun xdmp-server-to-cider-any-uruk (server)
+  (setq cider-any-uruk-host          (plist-get server :host)
+        cider-any-uruk-port          (plist-get server :port)
+        cider-any-uruk-user          (plist-get server :user)
+        cider-any-uruk-password      (plist-get server :password)
+        cider-any-uruk-content-base  (plist-get server :content-base))
+  (list cider-any-uruk-host
+        cider-any-uruk-port
+        cider-any-uruk-user
+        cider-any-uruk-password
+        cider-any-uruk-content-base))
+
+(defun xdmp-propagate-server-to-cider-any-uruk ()
+  (xdmp-server-to-cider-any-uruk (xdmp-get-xdbc-server)))
+
+;; make sure that cider-any-uruk has our current XDBC server configuration
+(xdmp-propagate-server-to-cider-any-uruk)
+
+
+;;;; functions to retrieve config from LW configuration service
+;; (Just ignore if you don't have such a service or don't know what it is.)
+
+(defun xdmp-get-services/LW-conf ()
   (read (cider-eval-form/value "(keys (config-load))")))
 
-(defun get-config/LW-conf (service-name)
-  (interactive (list (completing-read "Service: " (get-services/LW-conf) nil t (cons ":xdbc-server" 0))))
-  (let ((db (read (cider-eval-form/value (format "(config-load-for-emacs %s)" service-name)))))
-    (setq cider-any-uruk-host          (plist-get db :host)
-          cider-any-uruk-port          (plist-get db :port)
-          cider-any-uruk-user          (plist-get db :user)
-          cider-any-uruk-password      (plist-get db :password)
-          cider-any-uruk-content-base  (plist-get db :content-base))
-    (list cider-any-uruk-host
-          cider-any-uruk-port
-          cider-any-uruk-user
-          cider-any-uruk-password
-          cider-any-uruk-content-base)))
+(defun xdmp-set-server/LW-conf (service-name)
+  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":xdbc-server" 0))))
+  (let ((server (read (cider-eval-form/value (format "(config-load-for-emacs %s)" service-name)))))
+
+    (let ((set-xdbc-server-p (/= 4 (prefix-numeric-value current-prefix-arg)))) ;; prefix set
+
+      ;; set server in xdmp-servers
+      (setq xdmp-servers
+            (plist-put xdmp-servers
+                       (if set-xdbc-server-p :xdbc-server :rest-server)
+                       server))
+
+      ;; also propagate to cider-any-uruk
+      (when set-xdbc-server-p
+        (xdmp-server-to-cider-any-uruk server)))))
+
+(defun xdmp-set-servers/LW-conf ()
+  (xdmp-set-server/LW-conf :xdbc-server)
+  (setq current-prefix-arg '(4)) ; C-u
+  (xdmp-set-server/LW-conf :rest-server))
 
 
 ;;;; functions to select databases
@@ -88,17 +128,25 @@
 (defvar xdmp-document-history nil)
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
-(defun xdmp-uruk-connection->clj ()
-  (format "{:host \"%s\"
-            :port \"%s\"
-            :user \"%s\"
-            :password \"%s\"
-            :database \"%s\"}"
+
+;;;; functions to encapsulate the REST server for Clojure
+
+(defun xdmp-maybe-add-current-database (server)
+  (if (plist-member server :database)
+      server
+    (append server (list :database (xdmp-get-current-database)))))
+
+(defun xdmp-rest-connection->clj ()
+  (cider-any-uruk-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
+
+;; old method to directly use the cider-any-uruk connection
+(defun xdmp-uruk-connection->clj-map ()
+  (format "{:host \"%s\" :port \"%s\" :user \"%s\" :password \"%s\" :database \"%s\"}"
           cider-any-uruk-host
-          7020 ;; cider-any-uruk-port
+          cider-any-uruk-port
           cider-any-uruk-user
           cider-any-uruk-password
-          (or cider-any-uruk-content-base (xdmp-get-default-database))))
+          (or cider-any-uruk-content-base (xdmp-get-current-database))))
 
 ;; load document using xquery
 (defun xdmp-document-load (&optional directory)
@@ -134,7 +182,7 @@ xdmp:document-load(\"%s\",
                (file-name-as-directory directory)
              "")
            (buffer-name)
-           (xdmp-uruk-connection->clj)))
+           (xdmp-rest-connection->clj)))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
