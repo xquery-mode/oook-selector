@@ -22,7 +22,13 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 ```
 (let ((default-directory  "~/src/emacs/"))
   (normal-top-level-add-to-load-path '("."))
-  (normal-top-level-add-subdirs-to-load-path))
+  (normal-top-level-add-to-load-path '("page-break-lines"))
+  (normal-top-level-add-to-load-path '("xquery-mode"))
+  (normal-top-level-add-to-load-path '("cider-any"))
+  (normal-top-level-add-to-load-path '("cider-any/examples"))
+  (normal-top-level-add-to-load-path '("xdbc-selector"))
+  ;;(normal-top-level-add-subdirs-to-load-path)
+  )
 
 (require 'xdbc-setup)
 
