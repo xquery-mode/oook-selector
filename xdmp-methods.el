@@ -171,7 +171,7 @@ xdmp:document-load(\"%s\",
                       (buffer-name))))
 
 ;; load document using ml-file-loader api
-(defun xdmp-document-load/rest (&optional directory)
+(defun xdmp-document-load/rest-from-file (&optional directory)
   (interactive
    (list
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
@@ -179,6 +179,23 @@ xdmp:document-load(\"%s\",
                  (car xdmp-document-history))))
   (let ((form (format "(upload-document \"%s\" \"%s%s\" %s)"
            (buffer-file-name)
+           (if (not (string-equal "" directory))
+               (file-name-as-directory directory)
+             "")
+           (buffer-name)
+           (xdmp-rest-connection->clj)))
+        (ns "ml-file-loading.core"))
+    (cider-eval-form form ns)))
+
+;; load document using ml-file-loader api
+(defun xdmp-document-load/rest-from-string (&optional directory)
+  (interactive
+   (list
+    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
+  (let ((form (format "(upload-document-string \"%s\" \"%s%s\" %s)"
+           (replace-regexp-in-string "\"" "\\\\\"" (buffer-string))
            (if (not (string-equal "" directory))
                (file-name-as-directory directory)
              "")
