@@ -77,7 +77,7 @@ cat > uruk-gw/project.clj <<__EOL__
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [uruk "0.3.0"]]
+                 [uruk "0.3.3"]]
   :main ^:skip-aot uruk-gw.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
