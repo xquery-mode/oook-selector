@@ -138,26 +138,6 @@ xdmp:document-load(\"%s\",
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
-;; xdmp:document-insert test
-;;   turned out to be not nice at it expects node types not just strings for the content.
-;; (defun xdmp-document-insert (&optional directory)
-;;   (interactive
-;;    (list
-;;     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
-;;                  'xdmp-document-history
-;;                  (car xdmp-document-history))))
-;;   (xdmp-query (format "
-;; xquery version \"1.0-ml\";
-;; xdmp:document-insert(\"%s%s\",
-;;                      text{\"%s\"},
-;;                      xdmp:default-permissions(),
-;;                      xdmp:default-collections())"
-;;                       (if (not (string-equal "" directory))
-;;                           (file-name-as-directory directory)
-;;                         "")
-;;                       (buffer-name)
-;;                       (buffer-string))))
-
 (defun xdmp-document-delete (&optional directory)
   (interactive
    (list
