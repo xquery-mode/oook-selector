@@ -88,6 +88,19 @@
 (defvar xdmp-document-history nil)
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
+(defun xdmp-uruk-connection->clj ()
+  (format "{:host \"%s\"
+            :port \"%s\"
+            :user \"%s\"
+            :password \"%s\"
+            :database \"%s\"}"
+          cider-any-uruk-host
+          7020 ;; cider-any-uruk-port
+          cider-any-uruk-user
+          cider-any-uruk-password
+          (or cider-any-uruk-content-base (xdmp-get-default-database))))
+
+;; load document using xquery
 (defun xdmp-document-load (&optional directory)
   (interactive
    (list
@@ -107,6 +120,43 @@ xdmp:document-load(\"%s\",
                           (file-name-as-directory directory)
                         "")
                       (buffer-name))))
+
+;; load document using ml-file-loader api
+(defun xdmp-document-load (&optional directory)
+  (interactive
+   (list
+    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
+                 'xdmp-document-history
+                 (car xdmp-document-history))))
+  (let ((form (format "(upload-document \"%s\" \"%s%s\" %s)"
+           (buffer-file-name)
+           (if (not (string-equal "" directory))
+               (file-name-as-directory directory)
+             "")
+           (buffer-name)
+           (xdmp-uruk-connection->clj)))
+        (ns "ml-file-loading.core"))
+    (cider-eval-form form ns)))
+
+;; xdmp:document-insert test
+;;   turned out to be not nice at it expects node types not just strings for the content.
+;; (defun xdmp-document-insert (&optional directory)
+;;   (interactive
+;;    (list
+;;     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
+;;                  'xdmp-document-history
+;;                  (car xdmp-document-history))))
+;;   (xdmp-query (format "
+;; xquery version \"1.0-ml\";
+;; xdmp:document-insert(\"%s%s\",
+;;                      text{\"%s\"},
+;;                      xdmp:default-permissions(),
+;;                      xdmp:default-collections())"
+;;                       (if (not (string-equal "" directory))
+;;                           (file-name-as-directory directory)
+;;                         "")
+;;                       (buffer-name)
+;;                       (buffer-string))))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
