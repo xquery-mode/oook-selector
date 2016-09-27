@@ -18,6 +18,26 @@
   (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
 
 
+;;;; functions to retrieve config from clojure
+
+(defun get-services/LW-conf ()
+  (read (cider-eval-form/value "(keys (config-load))")))
+
+(defun get-config/LW-conf (service-name)
+  (interactive (list (completing-read "Service: " (get-services/LW-conf) nil t (cons ":xdbc-server" 0))))
+  (let ((db (read (cider-eval-form/value (format "(config-load-for-emacs %s)" service-name)))))
+    (setq cider-any-uruk-host          (plist-get db :host)
+          cider-any-uruk-port          (plist-get db :port)
+          cider-any-uruk-user          (plist-get db :user)
+          cider-any-uruk-password      (plist-get db :password)
+          cider-any-uruk-content-base  (plist-get db :content-base))
+    (list cider-any-uruk-host
+          cider-any-uruk-port
+          cider-any-uruk-user
+          cider-any-uruk-password
+          cider-any-uruk-content-base)))
+
+
 ;;;; functions to select databases
 
 (defun xdmp-select-database (content-base)

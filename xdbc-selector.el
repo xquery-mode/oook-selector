@@ -113,6 +113,13 @@ switch-to-buffer."
   (call-interactively 'xdmp-query))
 
 
+;;;; LW configuration service
+
+(def-xdbc-selector-method ?!
+  "Get session/connection config from LW configuration service"
+  (call-interactively 'get-config/LW-conf))
+
+
 ;;;; document management
 
 (def-xdbc-selector-method ?l
