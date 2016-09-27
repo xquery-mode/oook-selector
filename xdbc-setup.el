@@ -7,4 +7,6 @@
 
 (add-hook 'xquery-mode-hook 'cider-any-mode)
 
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest))
+
 (provide 'xdbc-setup)

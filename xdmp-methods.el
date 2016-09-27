@@ -150,7 +150,7 @@
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
 ;; load document using xquery
-(defun xdmp-document-load (&optional directory)
+(defun xdmp-document-load/xquery (&optional directory)
   (interactive
    (list
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
@@ -171,7 +171,7 @@ xdmp:document-load(\"%s\",
                       (buffer-name))))
 
 ;; load document using ml-file-loader api
-(defun xdmp-document-load (&optional directory)
+(defun xdmp-document-load/rest (&optional directory)
   (interactive
    (list
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
@@ -186,6 +186,8 @@ xdmp:document-load(\"%s\",
            (xdmp-rest-connection->clj)))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
+
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
