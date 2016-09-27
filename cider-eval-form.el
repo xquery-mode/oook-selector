@@ -1,3 +1,5 @@
+(require 'cider-any-uruk)
+
 ;; based on cider-read-and-eval
 (defun cider-eval-form (form &optional namespace)
   "Read a sexp from the minibuffer and output its result to the echo area.
@@ -36,3 +38,5 @@ If NAMESPACE is non-nil, it is sent to cider as current namespace."
        (nrepl-sync-request:eval form ;; should be  new-form  but there's a problem with multiple top-level forms
                                 (cider-current-connection) (cider-current-session))
        "value"))))
+
+(provide 'cider-eval-form)

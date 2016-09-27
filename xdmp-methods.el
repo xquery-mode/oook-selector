@@ -1,5 +1,6 @@
-(provide 'xdmp-methods)
-
+(require 'xquery-mode)
+(require 'cider-any-uruk)
+(require 'cider-eval-form)
 
 ;;;; xdmp interface functions to query for databases
 
@@ -130,3 +131,5 @@ doc(\"%s\")"
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)
 ;; (global-set-key (kbd "C-c C-q") 'xdmp-list-documents)
+
+(provide 'xdmp-methods)

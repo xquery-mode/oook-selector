@@ -1,5 +1,4 @@
 (require 'xdmp-methods)
-(provide 'xdbc-selector)
 
 ;;;; xdbc selector
 
@@ -176,3 +175,5 @@ switch-to-buffer."
 (def-xdbc-selector-method ?/
   "Show with database is currently used"
   (xdmp-show-current-database))
+
+(provide 'xdbc-selector)

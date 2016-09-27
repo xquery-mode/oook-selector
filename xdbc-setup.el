@@ -1,11 +1,10 @@
-(provide 'xdbc-setup)
+(require 'xdbc-selector)
 
-(require 'xquery-mode)
-(require 'cider-any-uruk)
-(add-hook 'xquery-mode-hook 'cider-any-mode)
+;;; register selector as global key binding
+(global-set-key "\C-cm" 'xdbc-selector)
 
 (require 'cider-any-uruk-pprint)
 
-(require 'xdbc-selector)
-;;; register selector as global key binding
-(global-set-key "\C-cm" 'xdbc-selector)
+(add-hook 'xquery-mode-hook 'cider-any-mode)
+
+(provide 'xdbc-setup)
