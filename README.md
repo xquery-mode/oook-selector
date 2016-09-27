@@ -25,6 +25,17 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'xdbc-setup)
+
+;; Uncomment the following line if your Clojure project uses ml-file-loading:
+;; (provide 'ml-file-loading)
+
+;; default server configuration
+;; Note: You don't need this section if you use an LW configuration service.
+(setq xdmp-servers
+  '(:rest-server (:host "localhost" :port "8000" :user "admin" :password "admin")
+    :xdbc-server (:host "localhost" :port "9000" :user "admin" :password "admin")))
+;; make sure that cider-any-uruk has our current XDBC server configuration
+(xdmp-propagate-server-to-cider-any-uruk)
 ```
 xdbc-setup does some initialization in addition to just loading the
 xdbc-selector.  If you want to do this step yourself and just load the
@@ -63,8 +74,12 @@ __EOL__
 
 ## Usage
 
-Than cider-jack-in to a uruk project and try the xdbc-selecter by entering C-cm
+Cider-jack-in to an uruk project and try the xdbc-selecter by entering  C-c m
 There is help if you press '?' afterwards.
+
+Note: If you use an LW configuration service, first enter  C-c m !  to fetch the
+      configuration for the XDBC and REST server of the application setting
+      :app/ml-file-loading  from the LW configuration service.
 
 With  C-c m x  you can just evaluate an xquery from a minibuffer.
 
@@ -94,6 +109,11 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m , - Select modules database of the server
   - C-c m - - Show with database is currently used
   - C-c m / - Show with database is currently used
+-  LW configuration service:
+   (Just ignore this section you don't have such a service or don't know what it is.)
+  - ! - Get default session/connection config for XDBC and REST servers from LW configuration service
+  - g - Get session/connection config for XDBC server from LW configuration service
+  - G - Get session/connection config for REST server from LW configuration service
 
 #### Note on upload and delete document methods
 To use upload and delete document you should have the file that
