@@ -116,7 +116,7 @@ switch-to-buffer."
 ;;;; LW configuration service
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
-(def-xdbc-selector-method ?!
+(def-xdbc-selector-method ?g
   "Get default session/connection config for ML connection from LW configuration service"
   (call-interactively 'xdmp-set-server/LW-conf))
 

@@ -89,7 +89,7 @@ __EOL__
 Cider-jack-in to an uruk project and try the xdbc-selecter by entering  C-c m
 There is help if you press '?' afterwards.
 
-Note: If you use an LW configuration service, first enter  C-c m !  to fetch the
+Note: If you use an LW configuration service, first enter  C-c m g  to fetch the
       configuration for the XDBC and REST server of the application setting
       :app/ml-file-loading  from the LW configuration service.
 
@@ -123,7 +123,7 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m / - Show which database is currently used
 -  LW configuration service:
    (Just ignore this section you don't have such a service or don't know what it is.)
-  - ! - Get default session/connection config for ML connection from LW configuration service
+  - C-c m g - Get default session/connection config for ML connection from LW configuration service
 
 #### Note on upload and delete document methods
 To use upload and delete document you should have the file that
