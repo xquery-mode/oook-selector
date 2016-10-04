@@ -194,7 +194,7 @@ xdmp:document-load(\"%s\",
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (let ((form (format "(upload-document-string \"%s\" \"%s%s\" %s)"
+  (let ((form (format "(insert-document \"%s\" \"%s%s\" %s)"
            (replace-regexp-in-string "\"" "\\\\\"" (buffer-string))
            (if (not (string-equal "" directory))
                (file-name-as-directory directory)
