@@ -6,10 +6,8 @@
 ;;;; functions to retrieve config from Clojure
 
 (defvar xdmp-servers
-  '(:rest-server
-   (:host "localhost" :port "6000" :user "foo" :password "bar")
-   :xdbc-server
-   (:host "localhost" :port "7000" :user "foo" :password "bar")))
+  '(:rest-server (:host "localhost" :port "6000" :user "foo" :password "bar")
+    :xdbc-server (:host "localhost" :port "7000" :user "foo" :password "bar")))
 
 (defun xdmp-get-xdbc-server ()
   (plist-get xdmp-servers :xdbc-server))
@@ -42,25 +40,12 @@
   (read (cider-eval-form/value "(keys (config-load))")))
 
 (defun xdmp-set-server/LW-conf (service-name)
-  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":xdbc-server" 0))))
-  (let ((server (read (cider-eval-form/value (format "(config-load-for-emacs %s)" service-name)))))
-
-    (let ((set-xdbc-server-p (/= 4 (prefix-numeric-value current-prefix-arg)))) ;; prefix set
-
-      ;; set server in xdmp-servers
-      (setq xdmp-servers
-            (plist-put xdmp-servers
-                       (if set-xdbc-server-p :xdbc-server :rest-server)
-                       server))
-
-      ;; also propagate to cider-any-uruk
-      (when set-xdbc-server-p
-        (xdmp-server-to-cider-any-uruk server)))))
-
-(defun xdmp-set-servers/LW-conf ()
-  (xdmp-set-server/LW-conf :xdbc-server)
-  (setq current-prefix-arg '(4)) ; C-u
-  (xdmp-set-server/LW-conf :rest-server))
+  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":ml-connection" 0))))
+  (let ((servers (read (cider-eval-form/value (format "(config-load-for-emacs %s)" service-name)))))
+    ;; set server in xdmp-servers
+    (setq xdmp-servers servers)
+    ;; also propagate to cider-any-uruk
+    (xdmp-propagate-server-to-cider-any-uruk)))
 
 
 ;;;; xdmp interface functions to query for databases

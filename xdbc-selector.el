@@ -117,16 +117,7 @@ switch-to-buffer."
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
 (def-xdbc-selector-method ?!
-  "Get default session/connection config for XDBC and REST server from LW configuration service"
-  (xdmp-set-servers/LW-conf))
-
-(def-xdbc-selector-method ?g
-  "Get session/connection config for XDBC server from LW configuration service"
-  (call-interactively 'xdmp-set-server/LW-conf))
-
-(def-xdbc-selector-method ?G
-  "Get session/connection config for REST server from LW configuration service"
-  (setq current-prefix-arg '(4)) ; C-u
+  "Get default session/connection config for ML connection from LW configuration service"
   (call-interactively 'xdmp-set-server/LW-conf))
 
 
@@ -187,10 +178,10 @@ switch-to-buffer."
   (xdmp-select-modules-database))
 
 (def-xdbc-selector-method ?-
-  "Show with database is currently used"
+  "Show which database is currently used"
   (xdmp-show-current-database))
 (def-xdbc-selector-method ?/
-  "Show with database is currently used"
+  "Show which database is currently used"
   (xdmp-show-current-database))
 
 (provide 'xdbc-selector)

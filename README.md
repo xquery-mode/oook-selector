@@ -119,13 +119,11 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m c - Choose/select database within current session/connection
   - C-c m . - Select default database of the server
   - C-c m , - Select modules database of the server
-  - C-c m - - Show with database is currently used
-  - C-c m / - Show with database is currently used
+  - C-c m - - Show which database is currently used
+  - C-c m / - Show which database is currently used
 -  LW configuration service:
    (Just ignore this section you don't have such a service or don't know what it is.)
-  - ! - Get default session/connection config for XDBC and REST servers from LW configuration service
-  - g - Get session/connection config for XDBC server from LW configuration service
-  - G - Get session/connection config for REST server from LW configuration service
+  - ! - Get default session/connection config for ML connection from LW configuration service
 
 #### Note on upload and delete document methods
 To use upload and delete document you should have the file that
