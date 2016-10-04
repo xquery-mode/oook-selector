@@ -180,12 +180,13 @@ xdmp:document-load(\"%s\",
                  'xdmp-document-history
                  (car xdmp-document-history))))
   (let ((form (format "(insert-document \"%s\" \"%s%s\" %s)"
-           (replace-regexp-in-string "\"" "\\\\\"" (buffer-string))
-           (if (not (string-equal "" directory))
-               (file-name-as-directory directory)
-             "")
-           (buffer-name)
-           (xdmp-rest-connection->clj)))
+                      (replace-regexp-in-string "\"" "\\\\\""
+                                                (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
+                      (if (not (string-equal "" directory))
+                          (file-name-as-directory directory)
+                        "")
+                      (buffer-name)
+                      (xdmp-rest-connection->clj)))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
