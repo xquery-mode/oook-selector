@@ -197,7 +197,7 @@ xdmp:document-delete(\"%s%s\")"
                         "")
                       (buffer-name))))
 
-(defvar xdmp-page-limit 30)
+(defvar xdmp-page-limit 1000)
 (defun xdmp-set-page-limit (number)
   (interactive "NNew page limit: ")
   (setq xdmp-page-limit number))
@@ -230,8 +230,9 @@ let $message :=
 return (
   $message
   ,
-  for $d in (if ($limit) then subsequence($results,$offset,$limit) else $results)
-    return xdmp:node-uri($d))
+  fn:string-join( (for $d in (if ($limit) then subsequence($results,$offset,$limit) else $results)
+                     return xdmp:node-uri($d)), '
+'))
 "
                         (file-name-as-directory directory)
                         limit
