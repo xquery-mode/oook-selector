@@ -175,7 +175,8 @@ xdmp:document-load(\"%s\",
                (file-name-as-directory directory)
              "")
            (buffer-name)
-           (xdmp-rest-connection->clj)))
+           (maybe-with-modules-database
+            (xdmp-rest-connection->clj))))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
@@ -193,7 +194,8 @@ xdmp:document-load(\"%s\",
                           (file-name-as-directory directory)
                         "")
                       (buffer-name)
-                      (xdmp-rest-connection->clj)))
+                      (maybe-with-modules-database
+                       (xdmp-rest-connection->clj))))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
