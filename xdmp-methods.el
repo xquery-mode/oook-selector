@@ -221,10 +221,11 @@ let $count := count($results)
 let $limit := %s
 let $page := %s
 let $offset := 1 + ($page - 1) * $limit
+let $pageEnd := min(($offset + $limit - 1,$count))
 let $message :=
   if ($limit) then
     (let $numpages := ceiling($count div $limit)
-      return concat('Displaying results ', $offset, ' - ', $offset + $limit - 1, ' of ', $count, ' (Page ', $page, ' of ', $numpages, ')'))
+      return concat('Displaying results ', $offset, ' - ', $pageEnd, ' of ', $count, ' (Page ', $page, ' of ', $numpages, ')'))
   else
     concat('Displaying all ', $count, ' results')
 return (
