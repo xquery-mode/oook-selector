@@ -70,15 +70,15 @@
 (defun xdmp-select-database (content-base)
   ;; also shows all databases because of the completion feature
   (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-default-database) 0))))
-  (setq cider-any-uruk-content-base content-base))
+  (setq cider-any-uruk-connection (plist-put cider-any-uruk-connection :content-base content-base)))
 
 (defun xdmp-select-default-database ()
   (interactive)
-  (setq cider-any-uruk-content-base (xdmp-get-default-database)))
+  (xdmp-select-database (xdmp-get-default-database)))
 
 (defun xdmp-select-modules-database ()
   (interactive)
-  (setq cider-any-uruk-content-base (xdmp-get-modules-database)))
+  (xdmp-select-database  (xdmp-get-modules-database)))
 
 (defun xdmp-show-current-database ()
   (interactive)
