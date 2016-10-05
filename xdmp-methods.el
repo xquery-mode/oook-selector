@@ -15,16 +15,7 @@
   (plist-get xdmp-servers :rest-server))
 
 (defun xdmp-server-to-cider-any-uruk (server)
-  (setq cider-any-uruk-host          (plist-get server :host)
-        cider-any-uruk-port          (plist-get server :port)
-        cider-any-uruk-user          (plist-get server :user)
-        cider-any-uruk-password      (plist-get server :password)
-        cider-any-uruk-content-base  (plist-get server :content-base))
-  (list cider-any-uruk-host
-        cider-any-uruk-port
-        cider-any-uruk-user
-        cider-any-uruk-password
-        cider-any-uruk-content-base))
+  (setq cider-any-uruk-connection server))
 
 (defun xdmp-propagate-server-to-cider-any-uruk ()
   (xdmp-server-to-cider-any-uruk (xdmp-get-xdbc-server)))
@@ -73,16 +64,6 @@
 
 (defun xdmp-rest-connection->clj ()
   (cider-any-uruk-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
-
-;; old method to directly use the cider-any-uruk connection
-(defun xdmp-uruk-connection->clj-map ()
-  (format "{:host \"%s\" :port \"%s\" :user \"%s\" :password \"%s\" :database \"%s\"}"
-          cider-any-uruk-host
-          cider-any-uruk-port
-          cider-any-uruk-user
-          cider-any-uruk-password
-          (or cider-any-uruk-content-base (xdmp-get-current-database))))
-
 
 ;;;; functions to select databases
 
