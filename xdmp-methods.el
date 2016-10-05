@@ -89,16 +89,26 @@
 
 (defvar xdmp-previous-database-stack nil)
 
-(defun xdmp-maybe-switch-to-modules-database () ;; silently uses the numerical prefix
-  (let ((arg (prefix-numeric-value current-prefix-arg)))
-    (when (= arg 4)
-      (push (xdmp-get-current-database) xdmp-previous-database-stack)
-      (xdmp-select-modules-database))))
+
+(defun xdmp-switch-to-modules-database ()
+  (push (xdmp-get-current-database) xdmp-previous-database-stack)
+  (xdmp-select-modules-database))
 
 (defun xdmp-maybe-switch-to-previous-database ()
   (let ((prev (pop xdmp-previous-database-stack)))
     (when prev
       (xdmp-select-database prev))))
+
+(defmacro with-modules-database (&rest body)
+  `(prog2
+      (xdmp-switch-to-modules-database)
+      (progn ,@body)
+    (xdmp-maybe-switch-to-previous-database)))
+
+(defun xdmp-maybe-switch-to-modules-database () ;; silently uses the numerical prefix
+  (let ((arg (prefix-numeric-value current-prefix-arg)))
+    (when (= arg 4)
+      (xdmp-switch-to-modules-database))))
 
 (defmacro maybe-with-modules-database (&rest body)
   `(prog2
@@ -214,6 +224,7 @@ Use numerical prefix to switch to a different page.
                  (car xdmp-document-history))))
   (let ((page (prefix-numeric-value current-prefix-arg))
         (limit (or xdmp-page-limit 0)))
+    (setq current-prefix-arg '(1)) ;; reset prefix for xdmp-query
     (xdmp-query (format "
 xquery version \"1.0-ml\";
 let $results := xdmp:directory(\"%s\",\"infinity\")

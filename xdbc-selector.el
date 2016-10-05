@@ -129,8 +129,8 @@ switch-to-buffer."
 
 (def-xdbc-selector-method ?L
   "List documents in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-list-documents))
+  (with-modules-database
+   (call-interactively 'xdmp-list-documents)))
 
 
 (def-xdbc-selector-method ?s
