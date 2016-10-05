@@ -107,15 +107,23 @@
 ;;;; helper function to temporarily switch to the modules databse
 
 (defvar xdmp-previous-database-stack nil)
+
 (defun xdmp-maybe-switch-to-modules-database () ;; silently uses the numerical prefix
   (let ((arg (prefix-numeric-value current-prefix-arg)))
     (when (= arg 4)
       (push (xdmp-get-current-database) xdmp-previous-database-stack)
       (xdmp-select-modules-database))))
+
 (defun xdmp-maybe-switch-to-previous-database ()
   (let ((prev (pop xdmp-previous-database-stack)))
     (when prev
       (xdmp-select-database prev))))
+
+(defmacro maybe-with-modules-database (&rest body)
+  `(prog2
+      (xdmp-maybe-switch-to-modules-database)
+      (progn ,@body)
+    (xdmp-maybe-switch-to-previous-database)))
 
 
 ;;;; main query function that wraps cider-any-eval
@@ -124,9 +132,8 @@
 (defun xdmp-query (string)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (xdmp-maybe-switch-to-modules-database)
-  (cider-any-eval string)
-  (xdmp-maybe-switch-to-previous-database))
+  (maybe-with-modules-database
+   (cider-any-eval string)))
 
 
 ;;; document load / delete / list / show
