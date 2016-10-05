@@ -197,18 +197,45 @@ xdmp:document-delete(\"%s%s\")"
                         "")
                       (buffer-name))))
 
+(defvar xdmp-page-limit 30)
+(defun xdmp-set-page-limit (number)
+  (interactive "NNew page limit: ")
+  (setq xdmp-page-limit number))
+
 (defun xdmp-list-documents (&optional directory)
+  "List documents (For paged output, set page limit with xdmp-set-page-limit.)
+Use numerical prefix to switch to a different page.
+(Cannot list documents with an URL not beginning with a '/'.)"
   (interactive
    (list
     (read-string (format "Directory [%s]: " (or (car xdmp-document-history) ""))
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (xdmp-query (format "
+  (let ((page (prefix-numeric-value current-prefix-arg))
+        (limit (or xdmp-page-limit 0)))
+    (xdmp-query (format "
 xquery version \"1.0-ml\";
-for $d in xdmp:directory(\"%s\",\"infinity\")
-  return xdmp:node-uri($d)"
-                      (file-name-as-directory directory))))
+let $results := xdmp:directory(\"%s\",\"infinity\")
+let $count := count($results)
+let $limit := %s
+let $page := %s
+let $offset := 1 + ($page - 1) * $limit
+let $message :=
+  if ($limit) then
+    (let $numpages := ceiling($count div $limit)
+      return concat('Displaying results ', $offset, ' - ', $offset + $limit - 1, ' of ', $count, ' (Page ', $page, ' of ', $numpages, ')'))
+  else
+    concat('Displaying all ', $count, ' results')
+return (
+  $message
+  ,
+  for $d in (if ($limit) then subsequence($results,$offset,$limit) else $results)
+    return xdmp:node-uri($d))
+"
+                        (file-name-as-directory directory)
+                        limit
+                        page))))
 
 (defun xdmp-show (&optional uri)
   (interactive
