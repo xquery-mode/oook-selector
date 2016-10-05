@@ -101,20 +101,9 @@
 
 (defmacro with-modules-database (&rest body)
   `(prog2
-      (xdmp-switch-to-modules-database)
-      (progn ,@body)
-    (xdmp-maybe-switch-to-previous-database)))
-
-(defun xdmp-maybe-switch-to-modules-database () ;; silently uses the numerical prefix
-  (let ((arg (prefix-numeric-value current-prefix-arg)))
-    (when (= arg 4)
-      (xdmp-switch-to-modules-database))))
-
-(defmacro maybe-with-modules-database (&rest body)
-  `(prog2
-      (xdmp-maybe-switch-to-modules-database)
-      (progn ,@body)
-    (xdmp-maybe-switch-to-previous-database)))
+       (xdmp-switch-to-modules-database)
+       (progn ,@body)
+     (xdmp-maybe-switch-to-previous-database)))
 
 
 ;;;; main query function that wraps cider-any-eval
@@ -123,8 +112,8 @@
 (defun xdmp-query (string)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (maybe-with-modules-database
-   (cider-any-eval string)))
+  (xdmp-show-current-database)
+  (cider-any-eval string))
 
 
 ;;; document load / delete / list / show
@@ -166,8 +155,7 @@ xdmp:document-load(\"%s\",
                (file-name-as-directory directory)
              "")
            (buffer-name)
-           (maybe-with-modules-database
-            (xdmp-rest-connection->clj))))
+           (xdmp-rest-connection->clj)))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
@@ -185,8 +173,7 @@ xdmp:document-load(\"%s\",
                           (file-name-as-directory directory)
                         "")
                       (buffer-name)
-                      (maybe-with-modules-database
-                       (xdmp-rest-connection->clj))))
+                      (xdmp-rest-connection->clj)))
         (ns "ml-file-loading.core"))
     (cider-eval-form form ns)))
 
@@ -224,7 +211,6 @@ Use numerical prefix to switch to a different page.
                  (car xdmp-document-history))))
   (let ((page (prefix-numeric-value current-prefix-arg))
         (limit (or xdmp-page-limit 0)))
-    (setq current-prefix-arg '(1)) ;; reset prefix for xdmp-query
     (xdmp-query (format "
 xquery version \"1.0-ml\";
 let $results := xdmp:directory(\"%s\",\"infinity\")

@@ -109,8 +109,8 @@ switch-to-buffer."
 
 (def-xdbc-selector-method ?X
   "Evaluate an xquery from minibuffer in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-query))
+  (with-modules-database
+   (call-interactively 'xdmp-query)))
 
 
 ;;;; LW configuration service
@@ -139,8 +139,8 @@ switch-to-buffer."
 
 (def-xdbc-selector-method ?S
   "Show document in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-show))
+  (with-modules-database
+   (call-interactively 'xdmp-show)))
 
 
 (def-xdbc-selector-method ?u
@@ -149,8 +149,8 @@ switch-to-buffer."
 
 (def-xdbc-selector-method ?U
   "Upload a document in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-document-load))
+  (with-modules-database
+   (call-interactively 'xdmp-document-load)))
 
 
 (def-xdbc-selector-method ?d
@@ -159,8 +159,8 @@ switch-to-buffer."
 
 (def-xdbc-selector-method ?D
   "Delete a document in the modules database"
-  (setq current-prefix-arg '(4)) ; C-u
-  (call-interactively 'xdmp-document-delete))
+  (with-modules-database
+   (call-interactively 'xdmp-document-delete)))
 
 
 ;;;; database selection
