@@ -107,23 +107,27 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m x - Evaluate an xquery from minibuffer
   - C-c m X - Evaluate an xquery from minibuffer in the modules database
 - document management:
-  - C-c m l - List documents
-  - C-c m L - List documents in the modules database
+  - C-c m l - List documents †
+  - C-c m L - List documents in the modules database †
   - C-c m s - Show document
   - C-c m S - Show document in the modules database
   - C-c m u - Upload a document
   - C-c m U - Upload a document in the modules database
   - C-c m d - Delete a document
-  - C-c m D - Delete a document in the modules database
+  - C-c m D - Delete a document in the modules database  
 - database selection:
   - C-c m c - Choose/select database within current session/connection
   - C-c m . - Select default database of the server
   - C-c m , - Select modules database of the server
   - C-c m - - Show which database is currently used
   - C-c m / - Show which database is currently used
--  LW configuration service:
-   (Just ignore this section you don't have such a service or don't know what it is.)
-  - C-c m g - Get default session/connection config for ML connection from LW configuration service
+- LW configuration service:  
+  (Just ignore this section you don't have such a service or don't know what it is.)
+  - C-c m g - Get connection settings for ML connection from LW configuration service
+
+† - For paged output, set page limit with xdmp-set-page-limit.
+    Use numerical prefix to switch to a different page.  
+    (Cannot list documents with an URL not beginning with a '/'.)
 
 #### Note on upload and delete document methods
 To use upload and delete document you should have the file that

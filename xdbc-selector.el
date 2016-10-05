@@ -117,14 +117,14 @@ switch-to-buffer."
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
 (def-xdbc-selector-method ?g
-  "Get default session/connection config for ML connection from LW configuration service"
+  "Get connection settings for ML connection from LW configuration service"
   (call-interactively 'xdmp-set-server/LW-conf))
 
 
 ;;;; document management
 
 (def-xdbc-selector-method ?l
-  "List documents"
+  "List documents (For paged output, set page limit with xdmp-set-page-limit.)"
   (call-interactively 'xdmp-list-documents))
 
 (def-xdbc-selector-method ?L
