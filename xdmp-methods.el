@@ -40,7 +40,7 @@
   (read (cider-eval-form/value "(keys (ml-file-loading.core/config-load))")))
 
 (defun xdmp-set-server/LW-conf (service-name)
-  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":ml-connection" 0))))
+  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":marklogic-connection" 0))))
   (let ((servers (read (cider-eval-form/value (format "(ml-file-loading.emacs/config-load-for-emacs %s)" service-name)))))
     ;; set server in xdmp-servers
     (setq xdmp-servers servers)
