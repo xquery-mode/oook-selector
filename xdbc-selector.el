@@ -142,6 +142,14 @@ switch-to-buffer."
   (with-modules-database
    (call-interactively 'xdmp-show)))
 
+(def-xdbc-selector-method ?t ;; show "this" document, use in documents list
+  "Show document at point"
+  (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line))))
+
+(def-xdbc-selector-method ?T ;; show "This" document, use in documents list
+  "Show document at point in the modules database"
+  (with-modules-database
+   (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line)))))
 
 (def-xdbc-selector-method ?u
   "Upload a document"
