@@ -4,6 +4,7 @@
 (global-set-key "\C-cm" 'xdbc-selector)
 
 (require 'cider-any-uruk-pprint)
+(cider-any-uruk-pprint-mode)
 
 (add-hook 'xquery-mode-hook 'cider-any-mode)
 
