@@ -36,10 +36,10 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
   ;;(normal-top-level-add-subdirs-to-load-path)
   )
 
-(require 'xdbc-setup)
-
 ;; Uncomment the following line if your Clojure project uses ml-file-loading:
 ;; (provide 'ml-file-loading)
+
+(require 'xdbc-setup)
 
 ;; default server configuration
 ;; Note: You don't need this section if you use an LW configuration service.
