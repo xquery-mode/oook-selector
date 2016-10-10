@@ -111,10 +111,12 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m L - List documents in the modules database †
   - C-c m s - Show document
   - C-c m S - Show document in the modules database
+  - C-c m t - Show this document at point
+  - C-c m T - Show this document at point in the modules database
   - C-c m u - Upload a document
   - C-c m U - Upload a document in the modules database
   - C-c m d - Delete a document
-  - C-c m D - Delete a document in the modules database  
+  - C-c m D - Delete a document in the modules database
 - database selection:
   - C-c m c - Choose/select database within current session/connection
   - C-c m . - Select default database of the server
@@ -124,6 +126,10 @@ a UPPERCASE one for the modules database of the current session/connection.
 - LW configuration service:  
   (Just ignore this section you don't have such a service or don't know what it is.)
   - C-c m g - Get connection settings for ML connection from LW configuration service
+- Cider convenience functions:
+  - C-c m j - (cider) Start an nREPL server for the current project and connect to it.
+  - C-c m r - (cider) Select the REPL buffer, when possible in an existing window.
+  - C-c m R - (cider) Switch to the last Clojure buffer.
 
 † - For paged output, set page limit with xdmp-set-page-limit.
     Use numerical prefix to switch to a different page.  

@@ -80,7 +80,11 @@ switch-to-buffer."
                           (cl-remove ,key xdbc-selector-methods :key #'car))
                     #'< :key #'car))))
 
-(def-xdbc-selector-method ?? "Selector help buffer"
+
+;; general methods
+
+(def-xdbc-selector-method ??
+  "Selector help buffer"
   (ignore-errors (kill-buffer "*Select Help*"))
   (with-current-buffer (get-buffer-create "*Select Help*")
     (insert "Select Methods:\n\n")
@@ -95,7 +99,8 @@ switch-to-buffer."
 ;; (cl-pushnew (list ?4 "Select in other window" (lambda () (xdbc-selector t)))
 ;;             xdbc-selector-methods :key #'car)
 
-(def-xdbc-selector-method ?q "Quit / abort"
+(def-xdbc-selector-method ?q
+  "Quit / abort"
   (top-level))
 
 
@@ -143,11 +148,11 @@ switch-to-buffer."
    (call-interactively 'xdmp-show)))
 
 (def-xdbc-selector-method ?t ;; show "this" document, use in documents list
-  "Show document at point"
+  "Show this document at point"
   (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line))))
 
 (def-xdbc-selector-method ?T ;; show "This" document, use in documents list
-  "Show document at point in the modules database"
+  "Show this document at point in the modules database"
   (with-modules-database
    (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line)))))
 
@@ -191,5 +196,20 @@ switch-to-buffer."
 (def-xdbc-selector-method ?/
   "Show which database is currently used"
   (xdmp-show-current-database))
+
+
+;; cider convenience functions
+
+(def-xdbc-selector-method ?j
+  "(cider) Start an nREPL server for the current project and connect to it."
+  (cider-jack-in))
+(def-xdbc-selector-method ?r
+  "(cider) Select the REPL buffer, when possible in an existing window."
+  (cider-switch-to-repl-buffer))
+
+(def-xdbc-selector-method ?R
+  "(cider) Switch to the last Clojure buffer."
+  (cider-switch-to-last-clojure-buffer))
+
 
 (provide 'xdbc-selector)
