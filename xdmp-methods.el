@@ -112,7 +112,6 @@
 (defun xdmp-query (string)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (xdmp-show-current-database)
   (cider-any-eval string))
 
 
