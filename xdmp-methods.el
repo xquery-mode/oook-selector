@@ -28,7 +28,7 @@
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
 (defun xdmp-get-services/LW-conf ()
-  (read (cider-eval-form/value "(keys (ml-file-loading.server/get-config))")))
+  (read (cider-eval-form/value "(keys (ml-file-loading.emacs/get-config))")))
 
 (defun xdmp-set-server/LW-conf (service-name)
   (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":marklogic-connection" 0))))
