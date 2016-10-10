@@ -16,7 +16,7 @@ If NAMESPACE is non-nil, it is sent to cider as current namespace."
 
                      (buffer-string))))
     (let ((cider-interactive-eval-override override))
-              (cider-interactive-eval new-form))))
+      (cider-interactive-eval new-form))))
 
 (defun cider-eval-form/value (form &optional namespace)
   "Read a sexp from the minibuffer and output its result to the echo area.
