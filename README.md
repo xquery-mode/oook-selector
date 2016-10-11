@@ -20,15 +20,10 @@ into a directory ~/src/emacs/
 Put this in your ~/.emacs or ~/.emacs.d/init.el:
 
 ```
-(let ((default-directory  "~/src/emacs/"))
-  (normal-top-level-add-to-load-path '("."))
-  (normal-top-level-add-to-load-path '("page-break-lines"))
-  (normal-top-level-add-to-load-path '("xquery-mode"))
-  (normal-top-level-add-to-load-path '("cider-any"))
-  (normal-top-level-add-to-load-path '("cider-any/examples"))
-  (normal-top-level-add-to-load-path '("xdbc-selector"))
-  ;;(normal-top-level-add-subdirs-to-load-path)
-  )
+(let ((default-directory "~/src/emacs/"))
+  (normal-top-level-add-subdirs-to-load-path))
+;; Warning: Keep your ~/src/emacs/ directory clean. Put old copies of projects
+;;   somewhere else.
 
 ;; Uncomment the following line if your Clojure project uses ml-file-loading:
 ;; (provide 'ml-file-loading)
