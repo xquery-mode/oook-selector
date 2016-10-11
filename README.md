@@ -17,12 +17,6 @@ into a directory ~/src/emacs/
   git clone https://github.com/purcell/page-break-lines.git
 ```
 
-Right now you have to use some special branches:
-```
-  cd ~/src/emacs/cider-any/
-  git checkout replace-URI-by-host-port
-```
-
 Put this in your ~/.emacs or ~/.emacs.d/init.el:
 
 ```
