@@ -242,7 +242,8 @@ return (
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (setq cider-any-uruk-buffer-filename uri)
+  (let ((fs-uri (expand-file-name (file-relative-name uri "/") default-directory)))
+    (setq cider-any-uruk-buffer-filename fs-uri))
   (xdmp-query (format "
 xquery version \"1.0-ml\";
 doc(\"%s\")"
