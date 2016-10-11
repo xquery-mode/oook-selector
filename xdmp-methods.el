@@ -242,6 +242,7 @@ return (
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
+  (setq cider-any-uruk-buffer-filename uri)
   (xdmp-query (format "
 xquery version \"1.0-ml\";
 doc(\"%s\")"
