@@ -25,8 +25,8 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 ;; Warning: Keep your ~/src/emacs/ directory clean. Put old copies of projects
 ;;   somewhere else.
 
-;; Uncomment the following line if your Clojure project uses ml-file-loading:
-;; (provide 'ml-file-loading)
+;; Uncomment the following line if your Clojure project uses lambdawerk.marklogic:
+;; (provide 'lambdawerk.marklogic)
 
 (require 'xdbc-setup)
 
