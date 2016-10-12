@@ -79,8 +79,7 @@ Cider-jack-in to an uruk project and try the xdbc-selecter by entering  C-c m
 There is help if you press '?' afterwards.
 
 Note: If you use an LW configuration service, first enter  C-c m g  to fetch the
-      configuration for the XDBC and REST server of the application setting
-      :app/ml-file-loading  from the LW configuration service.
+      configuration for the MarkLogic connection from the LW configuration service.
 
 With  C-c m x  you can just evaluate an xquery from a minibuffer.
 
