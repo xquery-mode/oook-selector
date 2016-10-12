@@ -1,3 +1,7 @@
+(let ((default-directory  (file-name-directory load-file-name)))
+  (normal-top-level-add-to-load-path '("."))
+  (normal-top-level-add-subdirs-to-load-path))
+
 (require 'xdbc-selector)
 
 ;;; register selector as global key binding
