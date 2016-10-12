@@ -8,27 +8,19 @@ It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
-Get xdbc-selector, xquery-mode, cider-any, and page-break-lines and put them
-into a directory ~/src/emacs/
+Get xdbc-selector and put it into a directory, e.g., ~/src/xdbc-selector
 ```
-  git clone https://github.com/xquery-mode/xdbc-selector.git
-  git clone https://github.com/xquery-mode/cider-any.git
-  git clone https://github.com/xquery-mode/xquery-mode.git
-  git clone https://github.com/purcell/page-break-lines.git
+  cd ~/src
+  git clone --recursive https://github.com/xquery-mode/xdbc-selector.git
 ```
 
 Put this in your ~/.emacs or ~/.emacs.d/init.el:
 
 ```
-(let ((default-directory "~/src/emacs/"))
-  (normal-top-level-add-subdirs-to-load-path))
-;; Warning: Keep your ~/src/emacs/ directory clean. Put old copies of projects
-;;   somewhere else.
-
 ;; Uncomment the following line if your Clojure project uses lambdawerk.marklogic:
 ;; (provide 'lambdawerk.marklogic)
 
-(require 'xdbc-setup)
+(require 'xdbc-setup  "~/src/xdbc-selector/xdbc-setup")
 
 ;; default server configuration
 ;; Note: You don't need this section if you use an LW configuration service.
@@ -38,17 +30,20 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 ;; make sure that cider-any-uruk has our current XDBC server configuration
 (xdmp-propagate-server-to-cider-any-uruk)
 ```
-xdbc-setup does some initialization in addition to just loading the
-xdbc-selector.  If you want to do this step yourself and just load the
-bare xdbc-selector replace the require line by:
-```
-(require 'xdbc-selector)
-```
 
-Get uruk and put it into your code directory, e.g. ~/src/
+Get uruk and put it into your code directory, e.g., ~/src/
 ```
   git clone https://github.com/daveliepmann/uruk.git
 ```
+
+Note: xdbc-setup does some initialization in addition to just loading the
+  xdbc-selector.  If you want to do this step yourself, and just load the
+  bare xdbc-selector, have a look at xdbc-setup.el to see how the loading
+  is done, and replace the require 'xdbc-setup line by something you prefer.
+
+Warning: xdbc-selector contains its own versions of cider-any, xquery-mode,
+  and page-break-lines. Make sure it does not conflict with local files
+  in your Emacs configuration. If in doubt, remove any other version.
 
 ## Set up leiningen project
 
