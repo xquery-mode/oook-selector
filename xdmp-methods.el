@@ -28,15 +28,25 @@
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
 (defun xdmp-get-services/LW-conf ()
-  (read (cider-eval-form/value "(do (require 'lambdawerk.marklogic.emacs) (keys (lambdawerk.marklogic.emacs/get-config)))")))
+  (unless (featurep 'lambdawerk.marklogic)
+    (error "Error: feature lambdawerk.marklogic not available, aborting command."))
+  (let ((result (cider-eval-form/value "(do (require 'lambdawerk.marklogic.emacs) (keys (lambdawerk.marklogic.emacs/get-config)))")))
+    (if result
+        (read result)
+      (error "Error: no connections available from LW configuration service, aborting command."))))
 
 (defun xdmp-set-server/LW-conf (service-name)
   (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":marklogic-connection" 0))))
-  (let ((servers (read (cider-eval-form/value (format "(lambdawerk.marklogic.emacs/get-config-for-emacs %s)" service-name)))))
-    ;; set server in xdmp-servers
-    (setq xdmp-servers servers)
-    ;; also propagate to cider-any-uruk
-    (xdmp-propagate-server-to-cider-any-uruk)))
+  (let ((result (cider-eval-form/value (format "(lambdawerk.marklogic.emacs/get-config-for-emacs %s)" service-name))))
+    (if result
+        (let ((servers (read result)))
+          ;; set server in xdmp-servers
+          (setq xdmp-servers servers)
+          ;; also propagate to cider-any-uruk
+          (xdmp-propagate-server-to-cider-any-uruk)
+          ;; inform user
+          (message "Connection %s selected." service-name))
+      (error "Error: no connection specified, aborting command."))))
 
 
 ;;;; xdmp interface functions to query for databases
