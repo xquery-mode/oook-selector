@@ -34,6 +34,7 @@ If NAMESPACE is non-nil, it is sent to cider as current namespace."
 
             (buffer-string))))
     (let ((cider-interactive-eval-override override))
+      (cider-map-connections #'ignore :any) ;; check for cider connection: usually done by cider-interactive-eval
       (nrepl-dict-get
        (nrepl-sync-request:eval form ;; should be  new-form  but there's a problem with multiple top-level forms
                                 (cider-current-connection) (cider-current-session))
