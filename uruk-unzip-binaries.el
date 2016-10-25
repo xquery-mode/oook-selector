@@ -18,12 +18,16 @@
        (.toString out encoding)))))
 
 (defn maybe-unzip [data]
-  (if (= (type data) (Class/forName \"[B\"))
-    ;; is byte-array => assume gzipped data and try to unzip
-    (gunzip data)
-    ;; something else (string, number, ...) => convert to String using str
-    (str data)))
+  (or (and (= (type data) (Class/forName \"[B\"))
+           ;; is byte-array => assume gzipped data and try to unzip
+           (try
+            (gunzip data)
+            ;; if not successfull => fail and let the default case handle it
+            (catch Exception e nil)))
+      ;; something else (string, number, ...) => convert to String using str
+      (str data)))
   ")
+
 
 (defun cider-any-uruk-eval-form ()
   "Clojure form for XQuery document revaluation."
