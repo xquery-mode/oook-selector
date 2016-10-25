@@ -9,7 +9,13 @@
 
 (require 'cider-eval-form)
 
+;; inject namespace cider-any-uruk-unzip-binaries
 (cider-eval-form "
+(create-ns 'cider-any-uruk-unzip-binaries)
+(binding [*ns* (the-ns 'cider-any-uruk-unzip-binaries)]
+  (eval '(do
+  (clojure.core/refer-clojure)
+
 (defn unzip
   ([string]
    (unzip string \"UTF-8\"))
@@ -19,7 +25,6 @@
        (org.apache.commons.io.IOUtils/copy (java.util.zip.GZIPInputStream. input-stream) out)
        (.close input-stream)
        (.toString out encoding)))))
-
 (defn hexify \"Convert byte sequence to hex string\" [coll]
   (let [hex [\\0 \\1 \\2 \\3 \\4 \\5 \\6 \\7 \\8 \\9 \\a \\b \\c \\d \\e \\f]]
       (letfn [(hexify-byte [b]
@@ -37,7 +42,9 @@
         (format \"<binary node of %s bytes> {0x%s%s}\" (alength data) (hexify (take 8 data)) (if (> (alength data) 8) \"...\" \"\"))))
     ;; something else (string, number, ...) => convert to String using str
     (str data)))
-  ")
+
+)))
+")
 
 (defun cider-any-uruk-eval-form ()
   "Clojure form for XQuery document revaluation."
@@ -49,10 +56,9 @@
                    port %s
                    db %s]
                (with-open [session (uruk/create-default-session (uruk/make-hosted-content-source host port db))]
-                 (doall (map maybe-unzip (uruk/execute-xquery session \"%%s\"))))))"
+                 (doall (map cider-any-uruk-unzip-binaries/maybe-unzip (uruk/execute-xquery session \"%%s\"))))))"
           (plist-get cider-any-uruk-connection :host)
           (plist-get cider-any-uruk-connection :port)
           (cider-any-uruk-plist-to-map cider-any-uruk-connection)))
-
 
 (provide 'cider-any-uruk-unzip-binaries)
