@@ -33,7 +33,7 @@
     (try
       (unzip data)
       ;; if not successfull => returnt info string
-      (catch Exception e 
+      (catch Exception e
         (format \"<binary node of %s bytes> {0x%s%s}\" (alength data) (hexify (take 8 data)) (if (> (alength data) 8) \"...\" \"\"))))
     ;; something else (string, number, ...) => convert to String using str
     (str data)))
