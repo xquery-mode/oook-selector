@@ -11,39 +11,42 @@
 
 ;; inject namespace cider-any-uruk-unzip-binaries
 (cider-eval-form "
-(create-ns 'cider-any-uruk-unzip-binaries)
-(binding [*ns* (the-ns 'cider-any-uruk-unzip-binaries)]
-  (eval '(do
-  (clojure.core/refer-clojure)
+(when-not (find-ns 'cider-any-uruk-unzip-binaries)
 
-(defn unzip
-  ([string]
-   (unzip string \"UTF-8\"))
-  ([string encoding]
-   (let [input-stream (clojure.java.io/input-stream string)]
-     (with-open [out (java.io.ByteArrayOutputStream.)]
-       (org.apache.commons.io.IOUtils/copy (java.util.zip.GZIPInputStream. input-stream) out)
-       (.close input-stream)
-       (.toString out encoding)))))
-(defn hexify \"Convert byte sequence to hex string\" [coll]
-  (let [hex [\\0 \\1 \\2 \\3 \\4 \\5 \\6 \\7 \\8 \\9 \\a \\b \\c \\d \\e \\f]]
+  (create-ns 'cider-any-uruk-unzip-binaries)
+  (binding [*ns* (the-ns 'cider-any-uruk-unzip-binaries)]
+    (eval '(do
+             (clojure.core/refer-clojure)
+
+  (defn unzip
+    ([string]
+     (unzip string \"UTF-8\"))
+    ([string encoding]
+     (let [input-stream (clojure.java.io/input-stream string)]
+       (with-open [out (java.io.ByteArrayOutputStream.)]
+         (org.apache.commons.io.IOUtils/copy (java.util.zip.GZIPInputStream. input-stream) out)
+         (.close input-stream)
+         (.toString out encoding)))))
+
+  (defn hexify \"Convert byte sequence to hex string\" [coll]
+    (let [hex [\\0 \\1 \\2 \\3 \\4 \\5 \\6 \\7 \\8 \\9 \\a \\b \\c \\d \\e \\f]]
       (letfn [(hexify-byte [b]
-        (let [v (bit-and b 0xFF)]
-          [(hex (bit-shift-right v 4)) (hex (bit-and v 0x0F))]))]
+                (let [v (bit-and b 0xFF)]
+                  [(hex (bit-shift-right v 4)) (hex (bit-and v 0x0F))]))]
         (apply str (mapcat hexify-byte coll)))))
+  
+  (defn maybe-unzip [data]
+    (if (= (type data) (Class/forName \"[B\"))
+           ;; is byte-array => assume gzipped data and try to unzip
+           (try
+             (unzip data)
+             ;; if not successfull => returnt info string
+             (catch Exception e
+               (format \"<binary node of %s bytes> {0x%s%s}\" (alength data) (hexify (take 8 data)) (if (> (alength data) 8) \"...\" \"\"))))
+           ;; something else (string, number, ...) => convert to String using str
+           (str data)))
 
-(defn maybe-unzip [data]
-  (if (= (type data) (Class/forName \"[B\"))
-    ;; is byte-array => assume gzipped data and try to unzip
-    (try
-      (unzip data)
-      ;; if not successfull => returnt info string
-      (catch Exception e
-        (format \"<binary node of %s bytes> {0x%s%s}\" (alength data) (hexify (take 8 data)) (if (> (alength data) 8) \"...\" \"\"))))
-    ;; something else (string, number, ...) => convert to String using str
-    (str data)))
-
-)))
+    ))))
 ")
 
 (defun cider-any-uruk-eval-form ()
