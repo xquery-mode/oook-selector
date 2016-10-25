@@ -12,6 +12,8 @@
 
 (add-hook 'xquery-mode-hook 'cider-any-mode)
 
+;; (require 'cider-any-uruk-unzip-binaries) ;; activate if wanted
+
 (when (featurep 'lambdawerk.marklogic)
   ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
   (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string)))
