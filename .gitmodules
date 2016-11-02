@@ -1,9 +1,6 @@
 [submodule "deps/xquery-mode"]
 	path = deps/xquery-mode
 	url = https://github.com/xquery-mode/xquery-mode.git
-[submodule "deps/cider-any"]
-	path = deps/cider-any
-	url = https://github.com/xquery-mode/cider-any.git
 [submodule "deps/page-break-lines"]
 	path = deps/page-break-lines
 	url = https://github.com/purcell/page-break-lines.git
