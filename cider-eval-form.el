@@ -1,4 +1,4 @@
-(require 'cider-any-uruk)
+(require 'oook)
 
 (defun cider-eval-form (form &optional namespace)
   (cider-ensure-connected)

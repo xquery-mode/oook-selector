@@ -1,5 +1,5 @@
 (require 'xquery-mode)
-(require 'cider-any-uruk)
+(require 'oook)
 (require 'cider-eval-form)
 
 
@@ -11,18 +11,18 @@
 
 (defun xdmp-get-xdbc-server ()
   (plist-get xdmp-servers :xdbc-server))
+
 (defun xdmp-get-rest-server ()
   (plist-get xdmp-servers :rest-server))
 
-(defun xdmp-server-to-cider-any-uruk (server)
-  (setq cider-any-uruk-connection server))
+(defun xdmp-server-to-oook (server)
+  (setq oook-connection server))
 
-(defun xdmp-propagate-server-to-cider-any-uruk ()
-  (xdmp-server-to-cider-any-uruk (xdmp-get-xdbc-server)))
+(defun xdmp-propagate-server-to-oook ()
+  (xdmp-server-to-oook (xdmp-get-xdbc-server)))
 
-;; make sure that cider-any-uruk has our current XDBC server configuration
-(xdmp-propagate-server-to-cider-any-uruk)
-
+;; make sure that oook has our current XDBC server configuration
+(xdmp-propagate-server-to-oook)
 
 ;;;; functions to retrieve config from LW configuration service
 ;; (Just ignore if you don't have such a service or don't know what it is.)
@@ -42,8 +42,8 @@
         (let ((servers (read result)))
           ;; set server in xdmp-servers
           (setq xdmp-servers servers)
-          ;; also propagate to cider-any-uruk
-          (xdmp-propagate-server-to-cider-any-uruk)
+          ;; also propagate to oook
+          (xdmp-propagate-server-to-oook)
           ;; inform user
           (message "Connection %s selected." service-name))
       (error "Error: no connection specified, aborting command."))))
@@ -52,17 +52,17 @@
 ;;;; xdmp interface functions to query for databases
 
 (defun xdmp-get-current-database ()
-  ;; should be the same as in variable 'cider-any-uruk-content-base'
-  (car (cider-any-string->list "xdmp:database-name(xdmp:database())")))
+  ;; should be the same as in variable 'oook-content-base'
+  (car (oook-eval-sync "xdmp:database-name(xdmp:database())")))
 
 (defun xdmp-get-default-database ()
-  (car (cider-any-string->list "xdmp:database-name(xdmp:server-database(xdmp:server()))")))
+  (car (oook-eval-sync "xdmp:database-name(xdmp:server-database(xdmp:server()))")))
 
 (defun xdmp-get-modules-database ()
-  (car (cider-any-string->list "xdmp:database-name(xdmp:modules-database())")))
+  (car (oook-eval-sync "xdmp:database-name(xdmp:modules-database())")))
 
 (defun xdmp-get-databases ()
-  (cider-any-string->list "for $d in xdmp:databases() return xdmp:database-name($d)"))
+  (oook-eval-sync "for $d in xdmp:databases() return xdmp:database-name($d)"))
 
 
 ;;;; functions to encapsulate the REST server for Clojure
@@ -73,14 +73,14 @@
     (append server (list :database (xdmp-get-current-database)))))
 
 (defun xdmp-rest-connection->clj ()
-  (cider-any-uruk-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
+  (oook-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
 
 ;;;; functions to select databases
 
 (defun xdmp-select-database (content-base)
   ;; also shows all databases because of the completion feature
   (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-default-database) 0))))
-  (setq cider-any-uruk-connection (plist-put cider-any-uruk-connection :content-base content-base)))
+  (setq oook-connection (plist-put oook-connection :content-base content-base)))
 
 (defun xdmp-select-default-database ()
   (interactive)
@@ -116,14 +116,13 @@
      (xdmp-maybe-switch-to-previous-database)))
 
 
-;;;; main query function that wraps cider-any-eval
+;;;; main query function that wraps oook-eval
 
 ;; temporarily switches to modules database (using helper functions) when called with C-u (that is numerical prefix of 4)
 (defun xdmp-query (string)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (cider-any-eval string))
-
+  (oook-eval string oook-eval-handler))
 
 ;;; document load / delete / list / show
 
@@ -253,7 +252,8 @@ return (
                  'xdmp-document-history
                  (car xdmp-document-history))))
   (let ((fs-uri (file-relative-name uri "/")))
-    (setq cider-any-uruk-buffer-filename fs-uri))
+    ;; TODO(m-g-r): this is unnecessary with new `oook-to-file' approach.
+    (setq oook-buffer-filename fs-uri))
   (xdmp-query (format "
 xquery version \"1.0-ml\";
 doc(\"%s\")"

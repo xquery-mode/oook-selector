@@ -1,4 +1,4 @@
-;;; Unzip gzipped binaries on cider-any-uruk-eval-form
+;;; Unzip gzipped binaries on oook-get-form
 
 ;;; Commentary:
 ;;; - if binary is zipped, unzip it and just output the contents
@@ -9,15 +9,15 @@
 
 (require 'cider-eval-form)
 
-(defun cider-any-uruk-eval-form ()
+(defun oook-get-form ()
   "Clojure form for XQuery document revaluation."
   (format "(do
 
-;; inject namespace cider-any-uruk-unzip-binaries
-(when-not (find-ns 'cider-any-uruk-unzip-binaries)
+;; inject namespace oook-unzip-binaries
+(when-not (find-ns 'oook-unzip-binaries)
 
-  (create-ns 'cider-any-uruk-unzip-binaries)
-  (binding [*ns* (the-ns 'cider-any-uruk-unzip-binaries)]
+  (create-ns 'oook-unzip-binaries)
+  (binding [*ns* (the-ns 'oook-unzip-binaries)]
     (eval '(do
              (clojure.core/refer-clojure)
 
@@ -37,7 +37,7 @@
                 (let [v (bit-and b 0xFF)]
                   [(hex (bit-shift-right v 4)) (hex (bit-and v 0x0F))]))]
         (apply str (mapcat hexify-byte coll)))))
-  
+
   (defn maybe-unzip [data]
     (if (= (type data) (Class/forName \"[B\"))
            ;; is byte-array => assume gzipped data and try to unzip
@@ -58,9 +58,9 @@
                    port %s
                    db %s]
                (with-open [session (uruk/create-default-session (uruk/make-hosted-content-source host port db))]
-                 (doall (map cider-any-uruk-unzip-binaries/maybe-unzip (uruk/execute-xquery session \"%%s\"))))))"
-          (plist-get cider-any-uruk-connection :host)
-          (plist-get cider-any-uruk-connection :port)
-          (cider-any-uruk-plist-to-map cider-any-uruk-connection)))
+                 (doall (map oook-unzip-binaries/maybe-unzip (uruk/execute-xquery session \"%%s\"))))))"
+          (plist-get oook-connection :host)
+          (plist-get oook-connection :port)
+          (oook-plist-to-map oook-connection)))
 
-(provide 'cider-any-uruk-unzip-binaries)
+(provide 'oook-unzip-binaries)

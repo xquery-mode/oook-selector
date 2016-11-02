@@ -1,4 +1,4 @@
-# xdbc selector
+# Oook selector
 
 This is the beginning of convenience tools for interacting with MarkLogic.
 
@@ -8,10 +8,10 @@ It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
-Get xdbc-selector and put it into a directory, e.g., ~/src/xdbc-selector
+Get oook-selector and put it into a directory, e.g., ~/src/oook-selector
 ```
   cd ~/src
-  git clone --recursive https://github.com/xquery-mode/xdbc-selector.git
+  git clone --recursive https://github.com/xquery-mode/oook-selector.git
 ```
 
 Put this in your ~/.emacs or ~/.emacs.d/init.el:
@@ -20,15 +20,15 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 ;; Uncomment the following line if your Clojure project uses lambdawerk.marklogic:
 ;; (provide 'lambdawerk.marklogic)
 
-(require 'xdbc-setup  "~/src/xdbc-selector/xdbc-setup")
+(require 'xdbc-setup  "~/src/oook-selector/xdbc-setup")
 
 ;; default server configuration
 ;; Note: You don't need this section if you use an LW configuration service.
 (setq xdmp-servers
   '(:rest-server (:host "localhost" :port "8000" :user "admin" :password "admin")
     :xdbc-server (:host "localhost" :port "9000" :user "admin" :password "admin")))
-;; make sure that cider-any-uruk has our current XDBC server configuration
-(xdmp-propagate-server-to-cider-any-uruk)
+;; make sure that oook has our current XDBC server configuration
+(xdmp-propagate-server-to-oook)
 ```
 
 Get uruk and put it into your code directory, e.g., ~/src/
@@ -37,11 +37,11 @@ Get uruk and put it into your code directory, e.g., ~/src/
 ```
 
 Note: xdbc-setup does some initialization in addition to just loading the
-  xdbc-selector.  If you want to do this step yourself, and just load the
-  bare xdbc-selector, have a look at xdbc-setup.el to see how the loading
+  oook-selector.  If you want to do this step yourself, and just load the
+  bare oook-selector, have a look at xdbc-setup.el to see how the loading
   is done, and replace the require 'xdbc-setup line by something you prefer.
 
-Warning: xdbc-selector contains its own versions of cider-any, xquery-mode,
+Warning: oook-selector contains its own versions of oook, xquery-mode,
   and page-break-lines. Make sure it does not conflict with local files
   in your Emacs configuration. If in doubt, remove any other version.
 
@@ -70,7 +70,7 @@ __EOL__
 
 ## Usage
 
-Cider-jack-in to an uruk project and try the xdbc-selecter by entering  C-c m
+Cider-jack-in to an uruk project and try the oook-selector by entering  C-c m
 There is help if you press '?' afterwards.
 
 Note: If you use an LW configuration service, first enter  C-c m g  to fetch the
@@ -106,7 +106,7 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m , - Select modules database of the server
   - C-c m - - Show which database is currently used
   - C-c m / - Show which database is currently used
-- LW configuration service:  
+- LW configuration service:
   (Just ignore this section you don't have such a service or don't know what it is.)
   - C-c m g - Get connection settings for ML connection from LW configuration service
 - Cider convenience functions:
@@ -115,7 +115,7 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m R - (cider) Switch to the last Clojure buffer.
 
 † - For paged output, set page limit with xdmp-set-page-limit.
-    Use numerical prefix to switch to a different page.  
+    Use numerical prefix to switch to a different page.
     (Cannot list documents with an URL not beginning with a '/'.)
 
 #### Note on upload and delete document methods

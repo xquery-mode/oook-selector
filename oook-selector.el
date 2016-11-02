@@ -1,6 +1,6 @@
 (require 'xdmp-methods)
 
-;;;; xdbc selector
+;;;; Oook selector
 
 ;; based on slime-selector, a.k.a. Slime's Buffer selector
 ;; see: https://github.com/slime/slime/blob/master/slime.el
@@ -30,29 +30,29 @@
 ;;     MA 02111-1307, USA.
 
 
-(defvar xdbc-selector-methods nil
-  "List of buffer-selection methods for the `xdbc-select' command.
+(defvar oook-selector-methods nil
+  "List of buffer-selection methods for the `oook-select' command.
 Each element is a list (KEY DESCRIPTION FUNCTION).
 DESCRIPTION is a one-line description of what the key selects.")
 
-(defvar xdbc-selector-other-window nil
+(defvar oook-selector-other-window nil
   "If non-nil use switch-to-buffer-other-window.")
 
-(defun xdbc-selector (&optional other-window)
+(defun oook-selector (&optional other-window)
   "Select a new buffer by type, indicated by a single character.
 The user is prompted for a single character indicating the method by
 which to choose a new buffer. The `?' character describes the
 available methods.
 
-See `def-xdbc-selector-method' for defining new methods."
+See `oook-selector-defmethod' for defining new methods."
   (interactive)
   (message "Select [%s]: "
-           (apply #'string (mapcar #'car xdbc-selector-methods)))
-  (let* ((xdbc-selector-other-window other-window)
+           (apply #'string (mapcar #'car oook-selector-methods)))
+  (let* ((oook-selector-other-window other-window)
          (ch (save-window-excursion
                (select-window (minibuffer-window))
                (read-char)))
-         (method (cl-find ch xdbc-selector-methods :key #'car)))
+         (method (cl-find ch oook-selector-methods :key #'car)))
     (cond (method
            (funcall (cl-third method)))
           (t
@@ -60,10 +60,10 @@ See `def-xdbc-selector-method' for defining new methods."
            (ding)
            (sleep-for 1)
            (discard-input)
-           (xdbc-selector)))))
+           (oook-selector)))))
 
-(defmacro def-xdbc-selector-method (key description &rest body)
-  "Define a new `xdbc-select' buffer selection method.
+(defmacro oook-selector-defmethod (key description &rest body)
+  "Define a new `oook-select' buffer selection method.
 
 KEY is the key the user will enter to choose this method.
 
@@ -75,31 +75,31 @@ is chosen. The returned buffer is selected with
 switch-to-buffer."
   (let ((method `(lambda ()
                    ,@body)))
-    `(setq xdbc-selector-methods
+    `(setq oook-selector-methods
            (cl-sort (cons (list ,key ,description ,method)
-                          (cl-remove ,key xdbc-selector-methods :key #'car))
+                          (cl-remove ,key oook-selector-methods :key #'car))
                     #'< :key #'car))))
 
 
 ;; general methods
 
-(def-xdbc-selector-method ??
+(oook-selector-defmethod ??
   "Selector help buffer"
   (ignore-errors (kill-buffer "*Select Help*"))
   (with-current-buffer (get-buffer-create "*Select Help*")
     (insert "Select Methods:\n\n")
-    (cl-loop for (key line nil) in xdbc-selector-methods
+    (cl-loop for (key line nil) in oook-selector-methods
              do (insert (format "%c:\t%s\n" key line)))
     (goto-char (point-min))
     (help-mode)
     (display-buffer (current-buffer) t))
-  (xdbc-selector)
+  (oook-selector)
   (current-buffer))
 
-;; (cl-pushnew (list ?4 "Select in other window" (lambda () (xdbc-selector t)))
-;;             xdbc-selector-methods :key #'car)
+;; (cl-pushnew (list ?4 "Select in other window" (lambda () (oook-selector t)))
+;;             oook-selector-methods :key #'car)
 
-(def-xdbc-selector-method ?q
+(oook-selector-defmethod ?q
   "Quit / abort"
   (top-level))
 
@@ -108,11 +108,11 @@ switch-to-buffer."
 
 ;;;; simple xquery evaluation
 
-(def-xdbc-selector-method ?x
+(oook-selector-defmethod ?x
   "Evaluate an xquery from minibuffer"
   (call-interactively 'xdmp-query))
 
-(def-xdbc-selector-method ?X
+(oook-selector-defmethod ?X
   "Evaluate an xquery from minibuffer in the modules database"
   (with-modules-database
    (call-interactively 'xdmp-query)))
@@ -121,95 +121,94 @@ switch-to-buffer."
 ;;;; LW configuration service
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
-(def-xdbc-selector-method ?g
+(oook-selector-defmethod ?g
   "Get connection settings for ML connection from LW configuration service"
   (call-interactively 'xdmp-set-server/LW-conf))
 
 
 ;;;; document management
 
-(def-xdbc-selector-method ?l
+(oook-selector-defmethod ?l
   "List documents (For paged output, set page limit with xdmp-set-page-limit.)"
   (call-interactively 'xdmp-list-documents))
 
-(def-xdbc-selector-method ?L
+(oook-selector-defmethod ?L
   "List documents in the modules database"
   (with-modules-database
    (call-interactively 'xdmp-list-documents)))
 
 
-(def-xdbc-selector-method ?s
+(oook-selector-defmethod ?s
   "Show document"
   (call-interactively 'xdmp-show))
 
-(def-xdbc-selector-method ?S
+(oook-selector-defmethod ?S
   "Show document in the modules database"
   (with-modules-database
    (call-interactively 'xdmp-show)))
 
-(def-xdbc-selector-method ?t ;; show "this" document, use in documents list
+(oook-selector-defmethod ?t ;; show "this" document, use in documents list
   "Show this document at point"
   (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line))))
 
-(def-xdbc-selector-method ?T ;; show "This" document, use in documents list
+(oook-selector-defmethod ?T ;; show "This" document, use in documents list
   "Show this document at point in the modules database"
   (with-modules-database
    (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line)))))
 
-(def-xdbc-selector-method ?u
+(oook-selector-defmethod ?u
   "Upload a document"
   (call-interactively 'xdmp-document-load))
 
-(def-xdbc-selector-method ?U
+(oook-selector-defmethod ?U
   "Upload a document in the modules database"
   (with-modules-database
    (call-interactively 'xdmp-document-load)))
 
 
-(def-xdbc-selector-method ?d
+(oook-selector-defmethod ?d
   "Delete a document"
   (call-interactively 'xdmp-document-delete))
 
-(def-xdbc-selector-method ?D
+(oook-selector-defmethod ?D
   "Delete a document in the modules database"
   (with-modules-database
    (call-interactively 'xdmp-document-delete)))
 
-
 ;;;; database selection
 
-(def-xdbc-selector-method ?c ;; "choose"
+(oook-selector-defmethod ?c ;; "choose"
   "Choose/select database within current session/connection "
   (call-interactively 'xdmp-select-database))
 
-(def-xdbc-selector-method ?.
+(oook-selector-defmethod ?.
   "Select default database of the server"
   (xdmp-select-default-database))
 
-(def-xdbc-selector-method ?,
+(oook-selector-defmethod ?,
   "Select modules database of the server"
   (xdmp-select-modules-database))
 
-(def-xdbc-selector-method ?-
-  "Show which database is currently used"
-  (xdmp-show-current-database))
-(def-xdbc-selector-method ?/
+(oook-selector-defmethod ?-
   "Show which database is currently used"
   (xdmp-show-current-database))
 
+(oook-selector-defmethod ?/
+  "Show which database is currently used"
+  (xdmp-show-current-database))
 
 ;; cider convenience functions
 
-(def-xdbc-selector-method ?j
+(oook-selector-defmethod ?j
   "(cider) Start an nREPL server for the current project and connect to it."
   (cider-jack-in))
-(def-xdbc-selector-method ?r
+
+(oook-selector-defmethod ?r
   "(cider) Select the REPL buffer, when possible in an existing window."
   (cider-switch-to-repl-buffer))
 
-(def-xdbc-selector-method ?R
+(oook-selector-defmethod ?R
   "(cider) Switch to the last Clojure buffer."
   (cider-switch-to-last-clojure-buffer))
 
-
-(provide 'xdbc-selector)
+(provide 'oook-selector)
