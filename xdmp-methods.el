@@ -36,7 +36,7 @@
       (error "Error: no connections available from LW configuration service, aborting command."))))
 
 (defun xdmp-set-server/LW-conf (service-name)
-  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":marklogic-connection" 0))))
+  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons ":default" 0))))
   (let ((result (cider-eval-form/value (format "(lambdawerk.marklogic.emacs/get-config-for-emacs %s)" service-name))))
     (if result
         (let ((servers (read result)))
