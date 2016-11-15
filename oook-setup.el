@@ -18,4 +18,4 @@
   ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
   (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string)))
 
-(provide 'xdbc-setup)
+(provide 'oook-setup)

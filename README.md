@@ -20,7 +20,7 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 ;; Uncomment the following line if your Clojure project uses lambdawerk.marklogic:
 ;; (provide 'lambdawerk.marklogic)
 
-(require 'xdbc-setup  "~/src/oook-selector/xdbc-setup")
+(require 'oook-setup  "~/src/oook-selector/oook-setup")
 
 ;; default server configuration
 ;; Note: You don't need this section if you use an LW configuration service.
@@ -36,10 +36,10 @@ Get uruk and put it into your code directory, e.g., ~/src/
   git clone https://github.com/daveliepmann/uruk.git
 ```
 
-Note: xdbc-setup does some initialization in addition to just loading the
+Note: oook-setup does some initialization in addition to just loading the
   oook-selector.  If you want to do this step yourself, and just load the
-  bare oook-selector, have a look at xdbc-setup.el to see how the loading
-  is done, and replace the require 'xdbc-setup line by something you prefer.
+  bare oook-selector, have a look at oook-setup.el to see how the loading
+  is done, and replace the require 'oook-setup line by something you prefer.
 
 Warning: oook-selector contains its own versions of oook, xquery-mode,
   and page-break-lines. Make sure it does not conflict with local files

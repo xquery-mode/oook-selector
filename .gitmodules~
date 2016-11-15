@@ -4,6 +4,6 @@
 [submodule "deps/page-break-lines"]
 	path = deps/page-break-lines
 	url = https://github.com/purcell/page-break-lines.git
-[submodule "deps/oook"]
-	path = deps/oook
+[submodule "deps/Oook"]
+	path = deps/Oook
 	url = https://github.com/xquery-mode/Oook.git
