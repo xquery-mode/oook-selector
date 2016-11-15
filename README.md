@@ -2,6 +2,12 @@
 
 This is the beginning of convenience tools for interacting with MarkLogic.
 
+## Successor of xdbc-selector
+
+The Oook selector replaces xdbc-selector. Oook-selector now uses Oook instead
+of cider-any; we decided to get rid of the backend design of cider-any and
+have a simpler interface that just lets you evaluate XQuery documents.
+
 ## Warning
 
 It is not even alpha but just some very early work and might change a lot.
