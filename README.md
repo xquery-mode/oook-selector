@@ -2,6 +2,11 @@
 
 This is the beginning of convenience tools for interacting with MarkLogic.
 
+> Oook -- is all the [Librarian](https://en.wikipedia.org/wiki/Unseen_University#Librarian)
+> at the university of the Discworld ever utters. He is the sole staff
+> member of the greatest database of knowledge, and as such offers a
+> very versatile and helpful interface to it.
+
 ## Successor of xdbc-selector
 
 The Oook selector replaces xdbc-selector. Oook-selector now
