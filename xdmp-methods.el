@@ -164,7 +164,7 @@ xdmp:document-load(\"%s\",
              "")
            (buffer-name)
            (xdmp-rest-connection->clj)))
-        (ns "lambdawerk.marklogic.rest-api"))
+        (ns "lambdawerk.marklogic.calls"))
     (cider-eval-form form ns)))
 
 ;; load document using ml-file-loader api
@@ -182,7 +182,7 @@ xdmp:document-load(\"%s\",
                         "")
                       (buffer-name)
                       (xdmp-rest-connection->clj)))
-        (ns "lambdawerk.marklogic.rest-api"))
+        (ns "lambdawerk.marklogic.calls"))
     (cider-eval-form form ns)))
 
 (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
