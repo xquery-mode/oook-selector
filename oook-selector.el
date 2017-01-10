@@ -1,4 +1,5 @@
 (require 'xdmp-methods)
+(require 'oook-tools)
 
 ;;;; Oook selector
 
@@ -149,12 +150,12 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?t ;; show "this" document, use in documents list
   "Show this document at point"
-  (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line))))
+  (xdmp-show (replace-regexp-in-string "\n$" "" (whitespace-delimited-thing-at-point))))
 
 (oook-selector-defmethod ?T ;; show "This" document, use in documents list
   "Show this document at point in the modules database"
   (with-modules-database
-   (xdmp-show (replace-regexp-in-string "\n$" "" (thing-at-point 'line)))))
+   (xdmp-show (replace-regexp-in-string "\n$" "" (whitespace-delimited-thing-at-point)))))
 
 (oook-selector-defmethod ?u
   "Upload a document"
