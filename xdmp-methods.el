@@ -1,7 +1,7 @@
 (require 'xquery-mode)
 (require 'oook)
 (require 'cider-eval-form)
-
+(require 'oook-list-mode)
 
 ;;;; functions to retrieve config from Clojure
 
@@ -118,11 +118,16 @@
 
 ;;;; main query function that wraps oook-eval
 
-;; temporarily switches to modules database (using helper functions) when called with C-u (that is numerical prefix of 4)
-(defun xdmp-query (string)
+(defun xdmp-query (string &rest args)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (oook-eval string oook-eval-handler))
+  (let ((filename (plist-get args :filename)))
+    (if filename
+        (apply 'oook-eval string
+               #'oook-eval-to-file-handler
+               nil
+               args)
+      (apply 'oook-eval string oook-eval-handler nil args))))
 
 ;;; document load / delete / list / show
 
@@ -242,7 +247,8 @@ return (
 "
                         (file-name-as-directory directory)
                         limit
-                        page))))
+                        page)
+  :eval-in-buffer '(oook-list-mode))))
 
 (defun xdmp-show (&optional uri)
   (interactive
@@ -253,11 +259,17 @@ return (
                  (car xdmp-document-history))))
   (let ((fs-uri (file-relative-name uri "/")))
     ;; TODO(m-g-r): this is unnecessary with new `oook-to-file' approach.
-    (setq oook-buffer-filename fs-uri))
-  (xdmp-query (format "
+    ;;(setq oook-buffer-filename fs-uri)
+    (xdmp-query (format "
 xquery version \"1.0-ml\";
 doc(\"%s\")"
-                      uri)))
+                        uri)
+                :filename fs-uri)))
+
+(defun xdmp-show-this ()
+  (interactive)
+  (let ((uri (replace-regexp-in-string "\n$" "" (whitespace-delimited-thing-at-point))))
+    (xdmp-show uri)))
 
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)

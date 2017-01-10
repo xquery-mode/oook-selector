@@ -138,7 +138,6 @@ switch-to-buffer."
   (with-modules-database
    (call-interactively 'xdmp-list-documents)))
 
-
 (oook-selector-defmethod ?s
   "Show document"
   (call-interactively 'xdmp-show))
@@ -148,14 +147,14 @@ switch-to-buffer."
   (with-modules-database
    (call-interactively 'xdmp-show)))
 
-(oook-selector-defmethod ?t ;; show "this" document, use in documents list
+(oook-selector-defmethod ?t ;; show "this" document / show document at point, use in documents list
   "Show this document at point"
-  (xdmp-show (replace-regexp-in-string "\n$" "" (whitespace-delimited-thing-at-point))))
+  (xdmp-show-this))
 
-(oook-selector-defmethod ?T ;; show "This" document, use in documents list
+(oook-selector-defmethod ?T ;; show "This" document / show document at point in modules database, use in documents list
   "Show this document at point in the modules database"
   (with-modules-database
-   (xdmp-show (replace-regexp-in-string "\n$" "" (whitespace-delimited-thing-at-point)))))
+   (xdmp-show-this)))
 
 (oook-selector-defmethod ?u
   "Upload a document"

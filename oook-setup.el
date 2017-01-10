@@ -9,6 +9,7 @@
 
 (require 'oook-pprint)
 (oook-pprint-mode)
+(require 'oook-to-file)
 
 (add-hook 'xquery-mode-hook 'oook-mode)
 
