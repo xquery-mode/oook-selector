@@ -225,7 +225,14 @@ xdmp:document-delete(\"%s%s\")"
   nil
   "variable to hold the buffer's xdmp-database")
 
+(defun xdmp-get-buffer-or-current-database ()
+  (interactive)
+  (or xdmp-buffer-database
+      (xdmp-get-current-database)))
+
 (defun xdmp-set-buffer-database (database)
+  ;; also shows all databases because of the completion feature
+  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-buffer-or-current-database) 0))))
   (make-local-variable 'xdmp-buffer-database)
   (setq xdmp-buffer-database
         database))

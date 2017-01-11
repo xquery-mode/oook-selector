@@ -5,13 +5,9 @@
 (let ((map oook-list-mode-keymap))
   (setq oook-list-mode-keymap (make-sparse-keymap))
   (define-key map (kbd "C-m") (lambda ()
-                              (interactive)
-                              (let ((old-db (xdmp-get-current-database)))
-                                (when xdmp-buffer-database
-                                  (xdmp-select-database xdmp-buffer-database))
-                                (xdmp-show-this)
-                                (when xdmp-buffer-database
-                                  (xdmp-select-database old-db))))))
+                                (interactive)
+                                (xdmp-with-database (xdmp-get-buffer-or-current-database)
+                                 (xdmp-show-this)))))
 
 (define-minor-mode oook-list-mode
   "Interact with document lists of oook"
