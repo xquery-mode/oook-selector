@@ -115,7 +115,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?X
   "Evaluate an xquery from minibuffer in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (call-interactively 'xdmp-query)))
 
 
@@ -135,7 +135,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?L
   "List documents in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (call-interactively 'xdmp-list-documents)))
 
 (oook-selector-defmethod ?s
@@ -144,7 +144,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?S
   "Show document in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (call-interactively 'xdmp-show)))
 
 (oook-selector-defmethod ?t ;; show "this" document / show document at point, use in documents list
@@ -153,7 +153,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?T ;; show "This" document / show document at point in modules database, use in documents list
   "Show this document at point in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (xdmp-show-this)))
 
 (oook-selector-defmethod ?u
@@ -162,7 +162,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?U
   "Upload a document in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (call-interactively 'xdmp-document-load)))
 
 
@@ -172,7 +172,7 @@ switch-to-buffer."
 
 (oook-selector-defmethod ?D
   "Delete a document in the modules database"
-  (with-modules-database
+  (xdmp-with-modules-database
    (call-interactively 'xdmp-document-delete)))
 
 ;;;; database selection

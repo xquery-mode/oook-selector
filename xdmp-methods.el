@@ -99,21 +99,27 @@
 
 (defvar xdmp-previous-database-stack nil)
 
+(defun xdmp-switch-to-database (database)
+  (push (xdmp-get-current-database) xdmp-previous-database-stack)
+  (xdmp-select-database database))
 
 (defun xdmp-switch-to-modules-database ()
-  (push (xdmp-get-current-database) xdmp-previous-database-stack)
-  (xdmp-select-modules-database))
+  (xdmp-switch-to-database (xdmp-get-modules-database)))
 
 (defun xdmp-maybe-switch-to-previous-database ()
   (let ((prev (pop xdmp-previous-database-stack)))
     (when prev
       (xdmp-select-database prev))))
 
-(defmacro with-modules-database (&rest body)
+(defmacro xdmp-with-database (database &rest body)
   `(prog2
-       (xdmp-switch-to-modules-database)
+       (xdmp-switch-to-database ,database)
        (progn ,@body)
      (xdmp-maybe-switch-to-previous-database)))
+
+(defmacro xdmp-with-modules-database (&rest body)
+  `(xdmp-with-database (xdmp-get-modules-database)
+     ,@body))
 
 
 ;;;; main query function that wraps oook-eval
@@ -121,7 +127,10 @@
 (defun xdmp-query (string &rest args)
   "Eval an xquery -- temporarily switches to modules-database when called with C-u"
   (interactive "sQuery: ")
-  (let ((filename (plist-get args :filename)))
+  (let ((filename (plist-get args :filename))
+        (args (plist-put args :eval-in-buffer `(progn
+                                                 (xdmp-set-buffer-database ,(xdmp-get-current-database))
+                                                 ,(plist-get args :eval-in-buffer)))))
     (if filename
         (apply 'oook-eval string
                #'oook-eval-to-file-handler
