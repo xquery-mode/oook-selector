@@ -88,7 +88,7 @@
 
 (defun xdmp-select-modules-database ()
   (interactive)
-  (xdmp-select-database  (xdmp-get-modules-database)))
+  (xdmp-select-database (xdmp-get-modules-database)))
 
 (defun xdmp-show-current-database ()
   (interactive)
@@ -212,6 +212,15 @@ xdmp:document-delete(\"%s%s\")"
   (interactive "NNew page limit: ")
   (setq xdmp-page-limit number))
 
+(defvar xdmp-buffer-database
+  nil
+  "variable to hold the buffer's xdmp-database")
+
+(defun xdmp-set-buffer-database (database)
+  (make-local-variable 'xdmp-buffer-database)
+  (setq xdmp-buffer-database
+        database))
+
 (defun xdmp-list-documents (&optional directory)
   "List documents (For paged output, set page limit with xdmp-set-page-limit.)
 Use numerical prefix to switch to a different page.
@@ -248,7 +257,9 @@ return (
                         (file-name-as-directory directory)
                         limit
                         page)
-  :eval-in-buffer '(oook-list-mode))))
+  :eval-in-buffer `(progn
+                     (xdmp-set-buffer-database ,(xdmp-get-current-database))
+                     (oook-list-mode)))))
 
 (defun xdmp-show (&optional uri)
   (interactive
