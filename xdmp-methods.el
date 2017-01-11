@@ -144,78 +144,96 @@
 (defun xdmp-document-load/xquery (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
-                 'xdmp-document-history
-                 (car xdmp-document-history))))
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
   (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (xdmp-query (format "
+   (let* ((local-uri (buffer-file-name))
+          (filename (file-name-nondirectory (buffer-file-name)))
+          (directory (if (not (string-equal "" directory))
+                         (file-name-as-directory directory)
+                       ""))
+          (server-uri (concat directory filename)))
+     (xdmp-query (format "
 xquery version \"1.0-ml\";
 xdmp:document-load(\"%s\",
                    <options xmlns=\"xdmp:document-load\">
-                     <uri>%s%s</uri>
+                     <uri>%s</uri>
                      <repair>none</repair>
                      <permissions>{xdmp:default-permissions()}</permissions>
-                  </options>)"
-                                          (buffer-file-name)
-                                          (if (not (string-equal "" directory))
-                                              (file-name-as-directory directory)
-                                            "")
-                                          (buffer-name)))))
+                   </options>)"
+                         local-uri
+                         server-uri)))))
 
 ;; load document using ml-file-loader api
 (defun xdmp-document-load/rest-from-file (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
-                 'xdmp-document-history
-                 (car xdmp-document-history))))
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
   (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (let ((form (format "(upload-document \"%s\" \"%s%s\" %s)"
-                       (buffer-file-name)
-                       (if (not (string-equal "" directory))
-                           (file-name-as-directory directory)
-                         "")
-                       (buffer-name)
-                       (xdmp-rest-connection->clj)))
-         (ns "lambdawerk.marklogic.calls"))
+   (let* ((local-uri (buffer-file-name))
+          (filename (file-name-nondirectory (buffer-file-name)))
+          (directory (if (not (string-equal "" directory))
+                         (file-name-as-directory directory)
+                       ""))
+          (server-uri (concat directory filename))
+          (form (format "(upload-document \"%s\" \"%s\" %s)"
+                        local-uri
+                        server-uri
+                        (xdmp-rest-connection->clj)))
+          (ns "lambdawerk.marklogic.calls"))
      (cider-eval-form form ns))))
 
 ;; load document using ml-file-loader api
 (defun xdmp-document-load/rest-from-string (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) "")) nil
-                 'xdmp-document-history
-                 (car xdmp-document-history))))
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
   (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (let ((form (format "(upload-document \"%s\" \"%s%s\" %s)"
-                       (replace-regexp-in-string "\"" "\\\\\""
-                                                 (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
-                       (if (not (string-equal "" directory))
-                           (file-name-as-directory directory)
-                         "")
-                       (buffer-name)
-                       (xdmp-rest-connection->clj)))
-         (ns "lambdawerk.marklogic.calls"))
+   (let* ((local-uri (buffer-file-name))
+          (filename (file-name-nondirectory (buffer-file-name)))
+          (directory (if (not (string-equal "" directory))
+                         (file-name-as-directory directory)
+                       ""))
+          (server-uri (concat directory filename))
+          (form (format "(upload-document \"%s\" \"%s\" %s)"
+                        (replace-regexp-in-string "\"" "\\\\\""
+                                                  (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
+                        server-uri
+                        (xdmp-rest-connection->clj)))
+          (ns "lambdawerk.marklogic.calls"))
      (cider-eval-form form ns))))
 
 (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) ""))
-                 nil
-                 'xdmp-document-history
-                 (car xdmp-document-history))))
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default ""))
+                   nil
+                   'xdmp-document-history
+                   default))))
   (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (xdmp-query (format "
+   (let* ((local-uri (buffer-file-name))
+          (filename (file-name-nondirectory (buffer-file-name)))
+          (directory (if (not (string-equal "" directory))
+                         (file-name-as-directory directory)
+                       ""))
+          (server-uri (concat directory filename)))
+     (xdmp-query (format "
 xquery version \"1.0-ml\";
-xdmp:document-delete(\"%s%s\")"
-                      (if (not (string-equal "" directory))
-                          (file-name-as-directory directory)
-                        "")
-                      (buffer-name)))))
+xdmp:document-delete(\"%s\")"
+                         server-uri)))))
 
 (defvar xdmp-page-limit 1000)
 (defun xdmp-set-page-limit (number)
@@ -253,10 +271,11 @@ Use numerical prefix to switch to a different page.
 (Cannot list documents with an URL not beginning with a '/'.)"
   (interactive
    (list
-    (read-string (format "Directory [%s]: " (or (car xdmp-document-history) ""))
-                 nil
-                 'xdmp-document-history
-                 (car xdmp-document-history))))
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+     (read-string (format "Directory [%s]: " (or default ""))
+                  nil
+                  'xdmp-document-history
+                  default))))
   (let ((page (prefix-numeric-value current-prefix-arg))
         (limit (or xdmp-page-limit 0)))
     (xdmp-query (format "
@@ -299,7 +318,8 @@ return (
                  nil
                  'xdmp-document-history
                  (car xdmp-document-history))))
-  (let ((fs-uri (file-relative-name uri "/")))
+  (let ((directory (file-name-directory uri))
+        (filename (file-name-nondirectory uri)))
     ;; TODO(m-g-r): this is unnecessary with new `oook-to-file' approach.
     ;;(setq oook-buffer-filename fs-uri)
     (xdmp-with-database (xdmp-get-buffer-or-current-database)
@@ -307,7 +327,8 @@ return (
 xquery version \"1.0-ml\";
 doc(\"%s\")"
                         uri)
-                 :filename fs-uri))))
+                 :filename filename
+                 :eval-in-buffer `(xdmp-set-buffer-path ,directory)))))
 
 (defun xdmp-show-this ()
   (interactive)
