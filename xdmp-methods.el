@@ -226,6 +226,10 @@ xdmp:document-delete(\"%s%s\")"
   nil
   "variable to hold the buffer's xdmp-database")
 
+(defvar xdmp-buffer-path
+  nil
+  "variable to hold the buffer's oook list path")
+
 (defun xdmp-get-buffer-or-current-database ()
   (interactive)
   (or xdmp-buffer-database
@@ -235,8 +239,13 @@ xdmp:document-delete(\"%s%s\")"
   ;; also shows all databases because of the completion feature
   (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-buffer-or-current-database) 0))))
   (make-local-variable 'xdmp-buffer-database)
-  (setq xdmp-buffer-database
-        database))
+  (setq xdmp-buffer-database database))
+
+(defun xdmp-set-buffer-path (path)
+  ;; also shows all databases because of the completion feature
+  (interactive "s")
+  (make-local-variable 'xdmp-buffer-path)
+  (setq xdmp-buffer-path path))
 
 (defun xdmp-list-documents (&optional directory)
   "List documents (For paged output, set page limit with xdmp-set-page-limit.)
@@ -277,7 +286,11 @@ return (
                         limit
                         page
                         (file-name-as-directory directory))
-  :eval-in-buffer `(oook-list-mode))))
+  :buffer-name (format "*Oook List: %s (%s)*"
+                       directory (xdmp-get-current-database))
+  :eval-in-buffer `(progn
+                    (xdmp-set-buffer-path ,directory)
+                    (oook-list-mode)))))
 
 (defun xdmp-show (&optional uri)
   (interactive

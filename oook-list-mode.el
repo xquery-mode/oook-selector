@@ -4,6 +4,13 @@
 
 (let ((map oook-list-mode-keymap))
   (setq oook-list-mode-keymap (make-sparse-keymap))
+  (define-key map (kbd "u") (lambda ()
+                              (interactive)
+                              (xdmp-with-database (xdmp-get-buffer-or-current-database)
+                               (let ((path xdmp-buffer-path))
+                                 (if path
+                                     (xdmp-list-documents path)
+                                   (call-interactively 'xdmp-list-documents))))))
   (define-key map (kbd "C-m") 'xdmp-show-this)
   (define-key map (kbd "t") 'xdmp-show-this))
 
