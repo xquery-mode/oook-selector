@@ -1,18 +1,22 @@
+(require 'view)
+
 (defvar oook-list-mode-keymap
-  (make-sparse-keymap)
+  nil
   "keymap for Oook-List mode")
 
-(let ((map oook-list-mode-keymap))
+(progn
   (setq oook-list-mode-keymap (make-sparse-keymap))
-  (define-key map (kbd "u") (lambda ()
-                              (interactive)
-                              (xdmp-with-database (xdmp-get-buffer-or-current-database)
-                               (let ((path xdmp-buffer-path))
-                                 (if path
-                                     (xdmp-list-documents path)
-                                   (call-interactively 'xdmp-list-documents))))))
-  (define-key map (kbd "C-m") 'xdmp-show-this)
-  (define-key map (kbd "t") 'xdmp-show-this))
+  (let ((map oook-list-mode-keymap))
+    (define-key map (kbd "u") (lambda ()
+                                (interactive)
+                                (xdmp-with-database (xdmp-get-buffer-or-current-database)
+                                                    (let ((path xdmp-buffer-path))
+                                                      (if path
+                                                          (xdmp-list-documents path)
+                                                        (call-interactively 'xdmp-list-documents))))))
+    (define-key map (kbd "C-m") 'xdmp-show-this)
+    (define-key map (kbd "t") 'xdmp-show-this)
+    (define-key map (kbd "d") 'xdmp-delete-this)))
 
 (define-minor-mode oook-list-mode
   "Interact with document lists of oook"
