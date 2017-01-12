@@ -137,7 +137,7 @@
 
 ;;; document load / delete / list / show
 
-(defvar xdmp-document-history nil)
+(defvar xdmp-document-history (list "/"))
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
 ;; load document using xquery
