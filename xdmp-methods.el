@@ -155,7 +155,8 @@
                          (file-name-as-directory directory)
                        ""))
           (server-uri (concat directory filename)))
-     (xdmp-query (format "
+     (prog1
+         (xdmp-query (format "
 xquery version \"1.0-ml\";
 xdmp:document-load(\"%s\",
                    <options xmlns=\"xdmp:document-load\">
@@ -163,8 +164,9 @@ xdmp:document-load(\"%s\",
                      <repair>none</repair>
                      <permissions>{xdmp:default-permissions()}</permissions>
                    </options>)"
-                         local-uri
-                         server-uri)))))
+                             local-uri
+                             server-uri))
+       (xdmp-set-buffer-path directory)))))
 
 ;; load document using ml-file-loader api
 (defun xdmp-document-load/rest-from-file (&optional directory)
@@ -174,19 +176,21 @@ xdmp:document-load(\"%s\",
       (read-string (format "Directory [%s]: " (or default "")) nil
                    'xdmp-document-history
                    default))))
-  (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (let* ((local-uri (buffer-file-name))
-          (filename (file-name-nondirectory (buffer-file-name)))
-          (directory (if (not (string-equal "" directory))
-                         (file-name-as-directory directory)
-                       ""))
-          (server-uri (concat directory filename))
-          (form (format "(upload-document \"%s\" \"%s\" %s)"
-                        local-uri
-                        server-uri
-                        (xdmp-rest-connection->clj)))
-          (ns "lambdawerk.marklogic.calls"))
-     (cider-eval-form form ns))))
+  (prog1
+      (xdmp-with-database (xdmp-get-buffer-or-current-database)
+                          (let* ((local-uri (buffer-file-name))
+                                 (filename (file-name-nondirectory (buffer-file-name)))
+                                 (directory (if (not (string-equal "" directory))
+                                                (file-name-as-directory directory)
+                                              ""))
+                                 (server-uri (concat directory filename))
+                                 (form (format "(upload-document \"%s\" \"%s\" %s)"
+                                               local-uri
+                                               server-uri
+                                               (xdmp-rest-connection->clj)))
+                                 (ns "lambdawerk.marklogic.calls"))
+                            (cider-eval-form form ns)))
+    (xdmp-set-buffer-path directory)))
 
 ;; load document using ml-file-loader api
 (defun xdmp-document-load/rest-from-string (&optional directory)
@@ -196,24 +200,26 @@ xdmp:document-load(\"%s\",
       (read-string (format "Directory [%s]: " (or default "")) nil
                    'xdmp-document-history
                    default))))
-  (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (let* ((local-uri (buffer-file-name))
-          (filename (file-name-nondirectory (buffer-file-name)))
-          (directory (if (not (string-equal "" directory))
-                         (file-name-as-directory directory)
-                       ""))
-          (server-uri (concat directory filename))
-          (form (format "(upload-document \"%s\" \"%s\" %s)"
-                        (replace-regexp-in-string "\"" "\\\\\""
-                                                  (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
-                        server-uri
-                        (xdmp-rest-connection->clj)))
-          (ns "lambdawerk.marklogic.calls"))
-     (cider-eval-form form ns))))
+  (prog1
+      (xdmp-with-database (xdmp-get-buffer-or-current-database)
+                          (let* ((local-uri (buffer-file-name))
+                                 (filename (file-name-nondirectory (buffer-file-name)))
+                                 (directory (if (not (string-equal "" directory))
+                                                (file-name-as-directory directory)
+                                              ""))
+                                 (server-uri (concat directory filename))
+                                 (form (format "(upload-document \"%s\" \"%s\" %s)"
+                                               (replace-regexp-in-string "\"" "\\\\\""
+                                                                         (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
+                                               server-uri
+                                               (xdmp-rest-connection->clj)))
+                                 (ns "lambdawerk.marklogic.calls"))
+                            (cider-eval-form form ns)))
+    (xdmp-set-buffer-path directory)))
 
 (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
-(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
-(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
+;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
+;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
