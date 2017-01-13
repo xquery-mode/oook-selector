@@ -27,6 +27,7 @@ simpler interface that just lets you evaluate XQuery documents.
 Get [Uruk](https://github.com/daveliepmann/uruk) and put it into your
 code directory, e.g., `~/src/`
 ```
+  mkdir ~/src
   cd ~/src
   git clone https://github.com/daveliepmann/uruk.git
 ```
@@ -35,7 +36,7 @@ code directory, e.g., `~/src/`
 
 Start Emacs and run  `M-x package-install <Return> cider <Return>`.
 
-If it complains that cider is not available,
+If it complains that cider is not available ("[No match]"),
 put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 
 ```
@@ -56,7 +57,10 @@ To get [Leiningen](https://leiningen.org):
 * place it on your `$PATH` where your shell can find it (e.g., `~/bin`)
 * set it to be executable:
 ```
-chmod a+x ~/bin/lein
+  mkdir ~/bin
+  cd ~/bin
+  wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+  chmod a+x ~/bin/lein
 ```
 
 ### Install Oook selector and its dependencies
@@ -121,8 +125,8 @@ __EOL__
 ## Usage
 
 Cider-jack-in to an uruk project by opening the `project.clj` file in
-Emacs and starting a cider repl by entering  `C-c m j`. Then you can try
-the oook-selector by entering  `C-c m`  There is help if you press `?`
+Emacs and starting a cider repl by entering  `C-c m j`. You can try
+Oook selector by entering  `C-c m`  There is help if you press `?`
 afterwards.
 
 Note: If you use an LW configuration service, first enter  `C-c m g`  to fetch the
@@ -138,6 +142,10 @@ a UPPERCASE one for the modules database of the current session/connection.
 - general methods:
   - `C-c m ?` - Selector help buffer
   - `C-c m q` - Quit / abort
+- Cider convenience functions:
+  - `C-c m j` - (cider) Start an nREPL server for the current project and connect to it.
+  - `C-c m r` - (cider) Select the REPL buffer, when possible in an existing window.
+  - `C-c m R` - (cider) Switch to the last Clojure buffer.
 - simple xquery evaluation:
   - `C-c m x` - Evaluate an xquery from minibuffer
   - `C-c m X` - Evaluate an xquery from minibuffer in the modules database
@@ -161,12 +169,8 @@ a UPPERCASE one for the modules database of the current session/connection.
 - LW configuration service:
   (Just ignore this section you don't have such a service or don't know what it is.)
   - `C-c m g` - Get connection settings for ML connection from LW configuration service
-- Cider convenience functions:
-  - `C-c m j` - (cider) Start an nREPL server for the current project and connect to it.
-  - `C-c m r` - (cider) Select the REPL buffer, when possible in an existing window.
-  - `C-c m R` - (cider) Switch to the last Clojure buffer.
 
-† - Notes on the Document list
+#### † Notes on the Document list
 * Press  `u`  to update the document list
 * Press  `<Return>`  on a document's uri to show the document at point
   (This is the same as entering  `C-c m t`  outside of a Document list.)
