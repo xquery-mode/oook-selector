@@ -155,9 +155,9 @@ a UPPERCASE one for the modules database of the current session/connection.
   - `C-c m s` - Show document ‡
   - `C-c m S` - Show document in the modules database ‡
   - `C-c m t` - Show this document at point ‡
-  - `C-c m T` - Show this document at point in the modules database
+  - `C-c m T` - Show this document at point in the modules database ‡
   - `C-c m u` - Upload document ‡
-  - `C-c m U` - Upload document into the modules database
+  - `C-c m U` - Upload document into the modules database ‡
   - `C-c m d` - Delete document ‡
   - `C-c m D` - Delete document in the modules database
   - `C-c m b` - Set server path for current buffer ‡
