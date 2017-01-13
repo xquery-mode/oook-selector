@@ -90,7 +90,7 @@ Put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 
 Note: oook-setup does some initialization in addition to just loading the
   oook-selector. If you want to do this step yourself, and just load the
-  bare oook-selector, have a look at oook-setup.el to see how the loading
+  bare oook-selector, have a look at `oook-setup.el` to see how the loading
   is done, and replace the require 'oook-setup line by something you prefer.
 
 Warning: oook-selector contains its own versions of oook, xquery-mode,
