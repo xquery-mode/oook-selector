@@ -7,16 +7,16 @@ This is the beginning of convenience tools for interacting with MarkLogic.
 > member of the greatest database of knowledge, and as such offers a
 > very versatile and helpful interface to it.
 
-## Successor of xdbc-selector
+### Warning
+
+It is not even alpha but just some very early work and might change a lot.
+
+### Successor of xdbc-selector
 
 The Oook selector replaces xdbc-selector. Oook-selector now
 uses [Oook](https://github.com/xquery-mode/Oook) instead of cider-any;
 we decided to get rid of the backend design of cider-any and have a
 simpler interface that just lets you evaluate XQuery documents.
-
-## Warning
-
-It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
@@ -53,7 +53,7 @@ To get [Leiningen](https://leiningen.org):
   [lein script](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein)
   (or on Windows
   [lein.bat](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein.bat))
-* place it on your $PATH where your shell can find it (eg. ~/bin)
+* place it on your `$PATH` where your shell can find it (eg. ~/bin)
 * set it to be executable:
 ```
 chmod a+x ~/bin/lein
