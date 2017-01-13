@@ -57,7 +57,7 @@ To get [Leiningen](https://leiningen.org):
 * set it to be executable:
 ```
 chmod a+x ~/bin/lein
-    ``g`
+```
 
 ### Install Oook selector and its dependencies
 
