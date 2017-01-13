@@ -270,7 +270,12 @@ xdmp:document-delete(\"%s\")"
 
 (defun xdmp-set-buffer-path (path)
   ;; also shows all databases because of the completion feature
-  (interactive "s")
+  (interactive
+   (list
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
   (make-local-variable 'xdmp-buffer-path)
   (setq xdmp-buffer-path path))
 
