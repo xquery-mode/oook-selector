@@ -20,7 +20,48 @@ It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
-Get oook-selector and put it into a directory, e.g., ~/src/oook-selector
+### Prerequisitse
+
+#### Install Uruk
+
+Get [Uruk](https://github.com/daveliepmann/uruk) and put it into your
+code directory, e.g., ~/src/
+```
+  cd ~/src
+  git clone https://github.com/daveliepmann/uruk.git
+```
+
+#### Install Cider
+
+Start Emacs and run  M-x package-install <Return> cider <Return>.
+
+If it complains that cider is not available,
+put this in your ~/.emacs or ~/.emacs.d/init.el:
+
+```
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+```
+call  M-x package-refresh-contents  and try again.
+
+#### Install Leiningen
+
+To get [Leiningen](https://leiningen.org):
+1. download the
+   [lein script](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein)
+   (or on Windows
+   [lein.bat](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein.bat))
+2. place it on your $PATH where your shell can find it (eg. ~/bin)
+3. set it to be executable:
+```
+chmod a+x ~/bin/lein
+``
+
+### Install Oook selector and its dependencies
+
+Get Oook selector and put it into a directory, e.g., ~/src/oook-selector
 ```
   cd ~/src
   git clone --recursive https://github.com/xquery-mode/oook-selector.git
@@ -43,11 +84,6 @@ Put this in your ~/.emacs or ~/.emacs.d/init.el:
 (xdmp-propagate-server-to-oook)
 ```
 
-Get uruk and put it into your code directory, e.g., ~/src/
-```
-  git clone https://github.com/daveliepmann/uruk.git
-```
-
 Note: oook-setup does some initialization in addition to just loading the
   oook-selector.  If you want to do this step yourself, and just load the
   bare oook-selector, have a look at oook-setup.el to see how the loading
@@ -59,11 +95,14 @@ Warning: oook-selector contains its own versions of oook, xquery-mode,
 
 ## Set up leiningen project
 
-Start cider repl in a leiningen project. The Uruk library must be
-pinned in the project.clj in the dependencies section.
+In order to use Oook selector, you have to start cider repl in a
+leiningen project. The Uruk library must be pinned in the project.clj
+in the dependencies section.
 
 You can use just a stub project that acts as a gateway like:
 ```
+cd ~/src
+
 lein new app uruk-gw
 
 cat > uruk-gw/project.clj <<__EOL__
@@ -79,11 +118,12 @@ cat > uruk-gw/project.clj <<__EOL__
   :profiles {:uberjar {:aot :all}})
 __EOL__
 ```
-
 ## Usage
 
-Cider-jack-in to an uruk project and try the oook-selector by entering  C-c m
-There is help if you press '?' afterwards.
+Cider-jack-in to an uruk project by opening the project.clj file in
+Emacs and starting a cider repl by entering  C-c m j. Then you can try
+the oook-selector by entering C-c m There is help if you press '?'
+afterwards.
 
 Note: If you use an LW configuration service, first enter  C-c m g  to fetch the
       configuration for the MarkLogic connection from the LW configuration service.
@@ -109,7 +149,7 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m t - Show this document at point
   - C-c m T - Show this document at point in the modules database
   - C-c m u - Upload a document
-  - C-c m U - Upload a document in the modules database
+  - C-c m U - Upload a document into the modules database
   - C-c m d - Delete a document
   - C-c m D - Delete a document in the modules database
 - database selection:
@@ -126,14 +166,18 @@ a UPPERCASE one for the modules database of the current session/connection.
   - C-c m r - (cider) Select the REPL buffer, when possible in an existing window.
   - C-c m R - (cider) Switch to the last Clojure buffer.
 
-† - For paged output, set page limit with xdmp-set-page-limit.
-    Use numerical prefix to switch to a different page.
-    (Cannot list documents with an URL not beginning with a '/'.)
+† - Notes on the Document list
+* Press  u  to update the document list
+* Press  <Return>  on a document's uri to show the document at point
+  (This is the same as entering  C-c m t  outside of a Document list.)
+* For paged output, set page limit with xdmp-set-page-limit.
+  Use numerical prefix to switch to a different page.
+* Currently, it cannot list documents with an URL not beginning with a '/'.
 
 #### Note on upload and delete document methods
-To use upload and delete document you should have the file that
-is to be transfered or delete open in a buffer. If you fire
-the command the filename will be taken from the buffer and
-you will be interactively queried to enter a directory path.
-The file will be uploaded with a uri of <directory>/<filename>.
-Delete works analogously.
+
+To use upload and delete document you should have the file that is to
+be transfered or delete open in a buffer. If you fire the command the
+filename will be taken from the buffer and you will be interactively
+queried to enter a directory path.  The file will be uploaded with a
+uri of <directory>/<filename>.  Delete works analogously.
