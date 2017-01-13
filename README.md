@@ -49,15 +49,15 @@ call  M-x package-refresh-contents  and try again.
 #### Install Leiningen
 
 To get [Leiningen](https://leiningen.org):
-1. download the
-   [lein script](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein)
-   (or on Windows
-   [lein.bat](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein.bat))
-2. place it on your $PATH where your shell can find it (eg. ~/bin)
-3. set it to be executable:
+* download the
+  [lein script](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein)
+  (or on Windows
+  [lein.bat](https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein.bat))
+* place it on your $PATH where your shell can find it (eg. ~/bin)
+* set it to be executable:
 ```
 chmod a+x ~/bin/lein
-``
+    ``g`
 
 ### Install Oook selector and its dependencies
 
