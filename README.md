@@ -20,7 +20,7 @@ It is not even alpha but just some very early work and might change a lot.
 
 ## Installation
 
-### Prerequisitse
+### Prerequisites
 
 #### Install Uruk
 
