@@ -119,14 +119,6 @@ switch-to-buffer."
    (call-interactively 'xdmp-query)))
 
 
-;;;; LW configuration service
-;; (Just ignore if you don't have such a service or don't know what it is.)
-
-(oook-selector-defmethod ?g
-  "Get connection settings for ML connection from LW configuration service"
-  (call-interactively 'xdmp-set-server/LW-conf))
-
-
 ;;;; document management
 
 (oook-selector-defmethod ?l

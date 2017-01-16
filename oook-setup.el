@@ -16,7 +16,6 @@
 ;; (require 'oook-unzip-binaries) ;; activate if wanted
 
 (when (featurep 'lambdawerk.marklogic)
-  ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
-  (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string)))
+  (require 'oook-lambdawerk))
 
 (provide 'oook-setup)
