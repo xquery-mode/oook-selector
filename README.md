@@ -74,13 +74,9 @@ Get Oook selector and put it into a directory, e.g., `~/src/oook-selector`
 Put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 
 ```
-;; Uncomment the following line if your Clojure project uses lambdawerk.marklogic:
-;; (provide 'lambdawerk.marklogic)
-
 (require 'oook-setup  "~/src/oook-selector/oook-setup")
 
 ;; default server configuration
-;; Note: You don't need this section if you use an LW configuration service.
 (setq xdmp-servers
   '(:rest-server (:host "localhost" :port "8000" :user "admin" :password "admin")
     :xdbc-server (:host "localhost" :port "9000" :user "admin" :password "admin")))
@@ -129,9 +125,6 @@ Emacs and starting a Cider REPL by entering  `C-c m j`. You can try
 Oook selector by entering  `C-c m`  There is help if you press `?`
 afterwards.
 
-Note: If you use an LW configuration service, first enter  `C-c m g`  to fetch the
-      configuration for the MarkLogic connection from the LW configuration service.
-
 With  `C-c m x`  you can just evaluate an XQuery from a minibuffer.
 
 All other commands have usually a lowercase version for the current database, and
@@ -168,9 +161,6 @@ a UPPERCASE one for the modules database of the current session/connection.
   - `C-c m ,` - Select modules database of the server
   - `C-c m -` - Show which database is currently used
   - `C-c m /` - Show which database is currently used
-- LW configuration service:
-  (Just ignore this section you don't have such a service or don't know what it is.)
-  - `C-c m g` - Get connection settings for ML connection from LW configuration service
 
 #### † Notes on the Document list
 * Press  `u`  to update the document list
