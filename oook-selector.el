@@ -176,12 +176,12 @@ switch-to-buffer."
    (call-interactively 'xdmp-document-delete)))
 
 (oook-selector-defmethod ?b
-  "Set database for current buffer"
-  (xdmp-set-buffer-database))
+  "Set server path for current buffer"
+  (call-interactively 'xdmp-set-buffer-path))
 
 (oook-selector-defmethod ?B
-  "Set server path for current buffer"
-  (xdmp-set-buffer-path))
+  "Set database for current buffer"
+  (call-interactively 'xdmp-set-buffer-database))
 
 ;;;; database selection
 
