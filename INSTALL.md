@@ -2,7 +2,7 @@
 
 If use Cider and Leiningen already, just jump to the section
 [Install Oook selector and its dependencies](#install-oook-selector-and-its-dependencies).
-Otherwise, follow the steps outlined in the next section
+Otherwise, follow the steps outlined in the next section,
 [Install prerequisites](#install-prerequisites).
 
 ### Install prerequisites
