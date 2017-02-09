@@ -58,7 +58,7 @@ __EOL__
 
 ## Usage
 
-Cider-jack-in to an Uruk project by opening the `project.clj` file in
+Cider-jack-in to an Uruk project by opening the `uruk-gw/project.clj` file in
 Emacs and starting a Cider REPL by entering  `C-c m j`. You can try
 Oook selector by entering  `C-c m`  There is help if you press `?`
 afterwards.
