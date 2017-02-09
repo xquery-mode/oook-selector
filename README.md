@@ -24,7 +24,7 @@ Please refer to the separate [installation instructions for Oook selector](INSTA
 
 If you haven't installed MarkLogic and just want to test Oook selector,
 you might want to follow our
-[quick installation instructions to install MarkLogic Server](INSTALL-MarkLogic.md).
+[quick instructions to install MarkLogic Server](INSTALL-MarkLogic.md).
 
 
 ## Set up a Leiningen project
