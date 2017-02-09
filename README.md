@@ -22,16 +22,6 @@ simpler interface that just lets you evaluate XQuery documents.
 
 ### Prerequisites
 
-#### Install Uruk
-
-Get [Uruk](https://github.com/daveliepmann/uruk) and put it into your
-code directory, e.g., `~/src/`
-```
-  mkdir ~/src
-  cd ~/src
-  git clone https://github.com/daveliepmann/uruk.git
-```
-
 #### Install Cider
 
 Start Emacs and run  `M-x package-install <Return> cider <Return>`.
