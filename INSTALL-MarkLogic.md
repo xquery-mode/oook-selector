@@ -1,6 +1,6 @@
 # Install MarkLogic Server
 
-* Goto to MarkLogic's products download page: https://developer.marklogic.com/products
+* Goto to MarkLogic's products download page at [https://developer.marklogic.com/products](https://developer.marklogic.com/products).
 * For Red Hat, CentOS, Fedora:
 ** download the RPM for Red Hat Enterprise Linux / CentOS and
 ** install by invoking:
@@ -32,7 +32,7 @@ You'll find a detailed description in MarkLogic's Guide in the section
 [Configuring a Single Host or the First Host in a Cluster](https://docs.marklogic.com/guide/installation/procedures#id_60220).
 
 Short version:
-* Log into the Admin Interface in a browser. It is on port 8001 of the host on which MarkLogic is running. For example, if it's running on localhost, just go to http://localhost:8001.
+* Log into the Admin Interface in a browser. It is on port 8001 of the host on which MarkLogic is running. For example, if it's running on localhost, just go to [http://localhost:8001](http://localhost:8001).
 * On the "Server Install" page, click "OK".
 * After a while, on the "Join a Cluster" page, click "Skip".
 * After a while, on the "Security Setup" page:
