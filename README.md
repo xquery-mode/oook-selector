@@ -26,8 +26,10 @@ Please refer to the separate [installation instructions](INSTALL.md).
 ## Set up a Leiningen project
 
 In order to use Oook selector, you have to start Cider REPL in a
-Leiningen project. The Uruk library must be pinned in the `project.clj`
-in the dependencies section.
+Leiningen project. The [Uruk](https://github.com/daveliepmann/uruk)
+library must be pinned in the `project.clj` in the dependencies section,
+as Oook and Oook selector actually use Uruk to talk to MarkLogic via
+[MarkLogic's XML Content Connector for Java (XCC/J)](https://docs.marklogic.com/javadoc/xcc/index.html).
 
 If you don't program in Clojure but want to use the Oook selector
 to access your XML database, you can just use a stub gateway project.
