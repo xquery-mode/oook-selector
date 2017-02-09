@@ -2,14 +2,14 @@
 
 * Goto to MarkLogic's products download page at [https://developer.marklogic.com/products](https://developer.marklogic.com/products).
 * For Red Hat, CentOS, Fedora:
-** download the RPM for Red Hat Enterprise Linux / CentOS and
-** install by invoking:
+ * download the RPM for Red Hat Enterprise Linux / CentOS and
+ * install by invoking:
 ```
 rpm -i MarkLogic-RHEL6-8.0-6.5.x86_64.rpm
 ```
 * Debian GNU/Linux is not officially supported, you can install it in this way:
-** downloading the RPM for Red Hat Enterprise Linux / CentOS and
-** and convert it to a Debian package and install this by:
+ * downloading the RPM for Red Hat Enterprise Linux / CentOS and
+ * and convert it to a Debian package and install this by:
 ```
 sudo apt-get install alien
 fakeroot alien --to-deb --verbose MarkLogic-RHEL6-8.0-6.5.x86_64.rpm
@@ -36,11 +36,11 @@ Short version:
 * On the "Server Install" page, click "OK".
 * After a while, on the "Join a Cluster" page, click "Skip".
 * After a while, on the "Security Setup" page:
-** in the "Admin" input box enter "admin",
-** in the "Password" input box enter "admin",
-** in the "Confirm Password" input box enter "admin",
-** in the "Realm" input box keep the text "public", and
-** click "OK".
+ * in the "Admin" input box enter "admin",
+ * in the "Password" input box enter "admin",
+ * in the "Confirm Password" input box enter "admin",
+ * in the "Realm" input box keep the text "public", and
+ * click "OK".
 * You will be prompted to log in with your admin username and password.
 
 # Remove MarkLogic
