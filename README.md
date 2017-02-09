@@ -63,8 +63,8 @@ the `uruk-gw/project.clj` file in Emacs and starting a Cider REPL by
 entering `C-c m j`.
 
 You actually use Oook selector by invoking `C-c m` plus an additional
-letter. There is help available by pressing `?` afterwards.  With `C-c
-m x`, for example, you can just evaluate an XQuery from a minibuffer.
+letter. There is help available by pressing `?`.  With `C-c m x`, for
+example, you can just evaluate an XQuery from a minibuffer.
 
 All other commands have usually a lowercase version for the current database, and
 a UPPERCASE one for the modules database of the current session/connection.
