@@ -55,7 +55,7 @@ To get [Leiningen](https://leiningen.org):
 
 ### Install Oook selector and its dependencies
 
-Get Oook selector and put it into a directory, e.g., `~/src/oook-selector`
+Get Oook selector and put it into a directory, e.g., `~/src/oook-selector`:
 ```
   cd ~/src
   git clone --recursive https://github.com/xquery-mode/oook-selector.git
@@ -89,7 +89,14 @@ In order to use Oook selector, you have to start Cider REPL in a
 Leiningen project. The Uruk library must be pinned in the `project.clj`
 in the dependencies section.
 
-You can use just a stub project that acts as a gateway like:
+If you don't program in Clojure but want to use the Oook selector
+to access your XML database, you can just use a stub gateway project.
+Just extract `uruk-gw.tbz`:
+```
+cd ~/src
+tar xvfj oook-selector/uruk-gw.tbz 
+```
+or recreate the stub project yourself by executing:
 ```
 cd ~/src
 
