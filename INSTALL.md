@@ -64,6 +64,8 @@ Note: `oook-setup` does some initialization in addition to just loading the
   bare Oook selector, have a look at `oook-setup.el` to see how the loading
   is done, and replace the `require 'oook-setup` line by something you prefer.
 
-Warning: Oook selector contains its own versions of Oook, XQuery Mode,
-  and Page Break Lines. Make sure it does not conflict with local files
-  in your Emacs configuration. If in doubt, remove any other version.
+Warning: Oook selector comes with its own versions of [Oook](https://github.com/xquery-mode/Oook),
+  [XQuery Mode](https://github.com/xquery-mode/xquery-mode), and
+  [Page Break Lines](https://github.com/purcell/page-break-lines)
+  as git submodules. Make sure it does not conflict with local files in your
+  Emacs configuration. If in doubt, remove any other version.
