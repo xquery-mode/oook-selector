@@ -59,11 +59,10 @@ __EOL__
 ## Usage
 
 Cider-jack-in to an Uruk project by opening the `uruk-gw/project.clj` file in
-Emacs and starting a Cider REPL by entering  `C-c m j`. You can try
-Oook selector by entering  `C-c m`  There is help if you press `?`
-afterwards.
+Emacs and starting a Cider REPL by entering  `C-c m j`.
 
-With  `C-c m x`  you can just evaluate an XQuery from a minibuffer.
+You actually use Oook selector by invoking  `C-c m`.  There is help if you press `?`
+afterwards. With  `C-c m x`, for example, you can just evaluate an XQuery from a minibuffer.
 
 All other commands have usually a lowercase version for the current database, and
 a UPPERCASE one for the modules database of the current session/connection.
