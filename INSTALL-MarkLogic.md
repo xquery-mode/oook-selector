@@ -43,22 +43,6 @@ Short version:
  * click "OK".
 * You will be prompted to log in with your admin username and password.
 
-# Remove MarkLogic
-You'll find a detailed description in MarkLogic's Guide in the section
-[Removing MarkLogic Server](https://docs.marklogic.com/guide/installation/procedures#id_53295).
-
-* On Debian GNU/Linux do this:
-```
-sudo /etc/init.d/MarkLogic stop
-sudo dpkg -r marklogic
-# or even:
-# dpkg --purge marklogic
-```
-* You might also want to remove all stored data and databases of the MarkLogic server, by invoking:
-```
-sudo rm -R /var/opt/MarkLogic
-```
-
 # Setup an intial database and REST server
 To configure a minimal MarkLogic REST server
 including a content database and a modules database, together with forests,
@@ -76,4 +60,20 @@ run:
 ```
   cd ~/src/oook-selector/doc/example-db
   . delete-rest-instance.sh
+```
+
+# Remove MarkLogic
+You'll find a detailed description in MarkLogic's Guide in the section
+[Removing MarkLogic Server](https://docs.marklogic.com/guide/installation/procedures#id_53295).
+
+* On Debian GNU/Linux do this:
+```
+sudo /etc/init.d/MarkLogic stop
+sudo dpkg -r marklogic
+# or even:
+# dpkg --purge marklogic
+```
+* You might also want to remove all stored data and databases of the MarkLogic server, by invoking:
+```
+sudo rm -R /var/opt/MarkLogic
 ```
