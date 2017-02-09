@@ -1,0 +1,7 @@
+<rest-api xmlns="http://marklogic.com/rest-api">
+  <name>lw-rest-appserver</name>
+  <database>lw-content</database>
+  <modules-database>lw-modules</modules-database>
+  <port>9000</port>
+  <forests-per-host>1</forests-per-host>
+</rest-api>
