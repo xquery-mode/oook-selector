@@ -58,8 +58,9 @@ __EOL__
 
 ## Usage
 
-Cider-jack-in to an Uruk project by opening the `uruk-gw/project.clj` file in
-Emacs and starting a Cider REPL by entering  `C-c m j`.
+To use Oook selector, you cider-jack-in to an Uruk project by opening
+the `uruk-gw/project.clj` file in Emacs and starting a Cider REPL by
+entering `C-c m j`.
 
 You actually use Oook selector by invoking  `C-c m`.  There is help if you press `?`
 afterwards. With  `C-c m x`, for example, you can just evaluate an XQuery from a minibuffer.
