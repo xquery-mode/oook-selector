@@ -20,7 +20,10 @@ simpler interface that just lets you evaluate XQuery documents.
 
 ## Installation
 
-Please refer to the separate [installation instructions](INSTALL.md).
+Please refer to the separate [installation instructions for Oook selector](INSTALL.md).
+If you haven't installed MarkLogic and just want to test Oook selector,
+you might want to follow our
+[quick installation instructions guide to install MarkLogic Server](INSTALL-MarkLogic.md).
 
 
 ## Set up a Leiningen project

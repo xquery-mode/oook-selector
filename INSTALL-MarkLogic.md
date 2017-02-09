@@ -15,7 +15,7 @@ sudo apt-get install alien
 fakeroot alien --to-deb --verbose MarkLogic-RHEL6-8.0-6.5.x86_64.rpm
 sudo dpkg -i marklogic_8.0-6.5_amd64.deb
 ```
-* for other platforms and more information please refer to
+* For other platforms and more information please refer to
 [MarkLogic's Installation Guide for All Platforms — Chapter 2, Procedures](https://docs.marklogic.com/guide/installation/procedures)
 
 # Start MarkLogic Server
