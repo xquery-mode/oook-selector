@@ -67,36 +67,3 @@ Note: `oook-setup` does some initialization in addition to just loading the
 Warning: Oook selector contains its own versions of Oook, XQuery Mode,
   and Page Break Lines. Make sure it does not conflict with local files
   in your Emacs configuration. If in doubt, remove any other version.
-
-## Set up a Leiningen project
-
-In order to use Oook selector, you have to start Cider REPL in a
-Leiningen project. The Uruk library must be pinned in the `project.clj`
-in the dependencies section.
-
-If you don't program in Clojure but want to use the Oook selector
-to access your XML database, you can just use a stub gateway project.
-Just extract `uruk-gw.tbz`:
-```
-cd ~/src
-tar xvfj oook-selector/uruk-gw.tbz 
-```
-or recreate the stub project yourself by executing:
-```
-cd ~/src
-
-lein new app uruk-gw
-
-cat > uruk-gw/project.clj <<__EOL__
-(defproject uruk-gw "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [uruk "0.3.3"]]
-  :main ^:skip-aot uruk-gw.core
-  :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
-__EOL__
-```
