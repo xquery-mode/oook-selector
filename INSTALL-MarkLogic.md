@@ -1,6 +1,6 @@
 # Install MarkLogic Server
 
-* Goto to MarkLogic's products download page at [https://developer.marklogic.com/products](https://developer.marklogic.com/products).
+* Go to MarkLogic's products download page at [https://developer.marklogic.com/products](https://developer.marklogic.com/products).
 * For Red Hat, CentOS, Fedora:
  * download the RPM for Red Hat Enterprise Linux / CentOS and
  * install by invoking:
