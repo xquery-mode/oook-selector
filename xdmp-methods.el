@@ -3,28 +3,6 @@
 (require 'cider-eval-form)
 (require 'oook-list-mode)
 
-;;;; functions to retrieve config from Clojure
-
-(defvar xdmp-servers
-  '(:rest-server (:host "localhost" :port "6000" :user "foo" :password "bar")
-    :xdbc-server (:host "localhost" :port "7000" :user "foo" :password "bar")))
-
-(defun xdmp-get-xdbc-server ()
-  (plist-get xdmp-servers :xdbc-server))
-
-(defun xdmp-get-rest-server ()
-  (plist-get xdmp-servers :rest-server))
-
-(defun xdmp-server-to-oook (server)
-  (setq oook-connection server))
-
-(defun xdmp-propagate-server-to-oook ()
-  (xdmp-server-to-oook (xdmp-get-xdbc-server)))
-
-;; make sure that oook has our current XDBC server configuration
-(xdmp-propagate-server-to-oook)
-
-
 ;;;; xdmp interface functions to query for databases
 
 (defun xdmp-get-current-database ()
@@ -40,7 +18,6 @@
 (defun xdmp-get-databases ()
   (oook-eval-sync "for $d in xdmp:databases() return xdmp:database-name($d)"))
 
-
 ;;;; functions to encapsulate the REST server for Clojure
 
 (defun xdmp-maybe-add-current-database (server)
@@ -49,7 +26,7 @@
     (append server (list :database (xdmp-get-current-database)))))
 
 (defun xdmp-rest-connection->clj ()
-  (oook-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
+  (oook-plist-to-map (xdmp-maybe-add-current-database oook-connection)))
 
 ;;;; functions to select databases
 
@@ -271,6 +248,11 @@ doc(\"%s\")"
   (interactive)
   (let ((uri (whitespace-delimited-thing-at-point)))
     (xdmp-show uri)))
+
+(defun xdmp-delete-this ()
+  (interactive)
+  (let ((uri (whitespace-delimited-thing-at-point)))
+    (xdmp-document-delete uri)))
 
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)
