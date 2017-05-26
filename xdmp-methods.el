@@ -30,9 +30,11 @@
 
 ;;;; functions to select databases
 
+(defvar xdmp-database-history nil)
+
 (defun xdmp-select-database (content-base)
   ;; also shows all databases because of the completion feature
-  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-default-database) 0))))
+  (interactive (list (completing-read (format "DB (default %s): " (xdmp-get-default-database)) (xdmp-get-databases) nil t nil 'xdmp-database-history (xdmp-get-default-database))))
   (setq oook-connection (plist-put oook-connection :content-base content-base)))
 
 (defun xdmp-select-default-database ()
@@ -164,7 +166,7 @@ xdmp:document-delete(\"%s\")"
 
 (defun xdmp-set-buffer-database (database)
   ;; also shows all databases because of the completion feature
-  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-buffer-or-current-database) 0))))
+  (interactive (list (completing-read (format "DB (default %s): " (xdmp-get-buffer-or-current-database)) (xdmp-get-databases) nil t nil 'minibuffer-history (xdmp-get-buffer-or-current-database))))
   (make-local-variable 'xdmp-buffer-database)
   (setq xdmp-buffer-database database))
 

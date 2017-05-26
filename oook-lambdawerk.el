@@ -17,7 +17,7 @@
 (defvar xdmp-server-history (list ":marklogic"))
 
 (defun xdmp-set-server/LW-conf (service-name)
-  (interactive (list (completing-read "Service: " (xdmp-get-services/LW-conf) nil t (cons (car xdmp-server-history) 0) 'xdmp-server-history)))
+  (interactive (list (completing-read (format "Service (default %s): " (car xdmp-server-history)) (xdmp-get-services/LW-conf) nil t nil 'xdmp-server-history xdmp-server-history)))
   (let ((result (cider-eval-form/value (format "(lambdawerk.marklogic.oook-selector/get-connection-spec-for-emacs %s)" service-name))))
     (if result
         (let ((server (read result)))
