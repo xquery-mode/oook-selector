@@ -27,67 +27,6 @@
           (message "Connection %s selected." service-name))
       (error "Error: no connection specified, aborting command."))))
 
-;;; document load / delete / list / show
-
-;; load document using ml-file-loader api
-(defun xdmp-document-load/rest-from-file (&optional directory)
-  (interactive
-   (list
-    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
-      (read-string (format "Directory [%s]: " (or default "")) nil
-                   'xdmp-document-history
-                   default))))
-  (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (prog1
-       (let* ((local-uri (buffer-file-name))
-              (filename (file-name-nondirectory (buffer-file-name)))
-              (directory (if (not (string-equal "" directory))
-                             (file-name-as-directory directory)
-                           ""))
-              (server-uri (concat directory filename))
-              (form (format "(upload-document \"%s\" \"%s\" %s)"
-                            local-uri
-                            server-uri
-                            (xdmp-rest-connection->clj)))
-              (ns "lambdawerk.marklogic.calls"))
-         (cider-eval-form form ns))
-     (xdmp-set-buffer-database (xdmp-get-current-database))
-     (xdmp-set-buffer-path directory))))
-
-;; load document using ml-file-loader api
-(defun xdmp-document-load/rest-from-string (&optional directory)
-  (interactive
-   (list
-    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
-      (read-string (format "Directory [%s]: " (or default "")) nil
-                   'xdmp-document-history
-                   default))))
-  (xdmp-with-database (xdmp-get-buffer-or-current-database)
-   (prog1
-       (let* ((local-uri (buffer-file-name))
-              (filename (file-name-nondirectory (buffer-file-name)))
-              (directory (if (not (string-equal "" directory))
-                             (file-name-as-directory directory)
-                           ""))
-              (server-uri (concat directory filename))
-              (form (format "(upload-document \"%s\" \"%s\" %s)"
-                            (replace-regexp-in-string "\"" "\\\\\""
-                                                      (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
-                            server-uri
-                            (xdmp-rest-connection->clj)))
-              (ns "lambdawerk.marklogic.calls"))
-         (cider-eval-form form ns)))
-   (xdmp-set-buffer-database (xdmp-get-current-database))
-   (xdmp-set-buffer-path directory)))
-
-;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
-;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
-;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
-(when (featurep 'lambdawerk.marklogic)
-  ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
-  (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string)))
-
-
 ;;;; LW configuration service
 ;; (Just ignore if you don't have such a service or don't know what it is.)
 
