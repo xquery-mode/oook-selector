@@ -64,13 +64,12 @@
                    default))))
   (xdmp-with-database (xdmp-get-buffer-or-current-database)
    (prog1
-       (let* ((local-uri (buffer-file-name))
-              (filename (file-name-nondirectory (buffer-file-name)))
+       (let* ((filename (file-name-nondirectory (or (buffer-file-name) (buffer-name))))
               (directory (if (not (string-equal "" directory))
                              (file-name-as-directory directory)
                            ""))
               (server-uri (concat directory filename))
-              (form (format "(upload-document \"%s\" \"%s\" %s)"
+              (form (format "(put-document \"%s\" \"%s\" %s)"
                             (replace-regexp-in-string "\"" "\\\\\""
                                                       (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))
                             server-uri
