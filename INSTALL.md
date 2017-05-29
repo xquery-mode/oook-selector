@@ -51,7 +51,7 @@ Put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 ```
 (require 'oook-setup  "~/src/oook-selector/oook-setup")
 
-;; default server configuration for ook
+;; default server configuration for oook
 (setq oook-connection
   '(:host "localhost" :port "8002" :user "admin" :password "admin"))
 ```
