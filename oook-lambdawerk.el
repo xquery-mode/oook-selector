@@ -79,12 +79,45 @@
    (xdmp-set-buffer-database (xdmp-get-current-database))
    (xdmp-set-buffer-path directory)))
 
+;; load document using new uruk/insert-string from Uruk 0.3.7
+(defun xdmp-document-load/uruk-insert-string (&optional directory)
+  (interactive
+   (list
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
+  (xdmp-with-database (xdmp-get-buffer-or-current-database)
+   (prog1
+       (let* ((filename (file-name-nondirectory (or (buffer-file-name) (buffer-name))))
+              (directory (if (not (string-equal "" directory))
+                             (file-name-as-directory directory)
+                           ""))
+              (server-uri (concat directory filename))
+              (eval-form (format "(let [host \"%s\"
+                                        port %s
+                                        db %s]
+                                    (with-open [session (uruk.core/create-default-session (uruk.core/make-hosted-content-source host port db))]
+                                      (doall (map str (uruk.core/insert-string session \"%%s\" \"%%s\")))))"
+                                 (plist-get oook-connection :host)
+                                 (plist-get oook-connection :port)
+                                 (oook-plist-to-map oook-connection)))
+              (form (format eval-form
+                            server-uri
+                            (replace-regexp-in-string "\"" "\\\\\""
+                                                      (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))))
+              (ns "uruk.core"))
+         (cider-eval-form form ns)))
+   (xdmp-set-buffer-database (xdmp-get-current-database))
+   (xdmp-set-buffer-path directory)))
+
 ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
 ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
 ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
 (when (featurep 'lambdawerk.marklogic)
   ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-file))
-  (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string)))
+  ;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/rest-from-string))
+  (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/uruk-insert-string)))
 
 
 ;;;; LW configuration service
