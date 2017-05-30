@@ -95,8 +95,8 @@
 (defvar xdmp-document-history (list "/"))
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
-(defun xdmp-document-load/xquery (&optional directory)
-  "load document using xquery
+(defun xdmp-document-load/xdmp-document-load (&optional directory)
+  "load document using xdmp:document-load via xquery
 
 pro:
  - does work with binary files as well
@@ -132,11 +132,13 @@ xdmp:document-load(\"%s\",
        (xdmp-set-buffer-path directory)))))
 
 (defun xdmp-document-load/uruk-insert-string (&optional directory)
-  "load document using new uruk/insert-string from Uruk 0.3.7
+  "load document using new uruk.core/insert-string method of Uruk 0.3.7
+
 pro:
  - also works if MarkLogic is installed on another host then the one where your Emacs runs
+ - just uploads the current contents of the buffer even if it is has not been stored to disk yet
+ - works for XML, JSON, and text files
 con:
- - does only work for XML, JSON, and text files
  - does not work for binary files
  - needs recent Uruk"
   (interactive
@@ -169,7 +171,7 @@ con:
    (xdmp-set-buffer-database (xdmp-get-current-database))
    (xdmp-set-buffer-path directory)))
 
-;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
+;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xdmp-document-load))
 (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/uruk-insert-string))
 
 (defun xdmp-document-delete (&optional directory)
