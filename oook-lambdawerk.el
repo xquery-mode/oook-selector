@@ -9,7 +9,7 @@
 (defun xdmp-get-services/LW-conf ()
   (unless (featurep 'lambdawerk.marklogic)
     (error "Error: feature lambdawerk.marklogic not available, aborting command."))
-  (let ((result (cider-eval-form/value "(do (require 'lambdawerk.marklogic.emacs) (keys (lambdawerk.marklogic.oook-selector/get-named-connection-specs)))")))
+  (let ((result (cider-eval-form/value "(do (require 'lambdawerk.marklogic.oook-selector) (keys (lambdawerk.marklogic.oook-selector/get-named-connection-specs)))")))
     (if result
         (read result)
       (error "Error: no connections available from LW configuration service, aborting command."))))
