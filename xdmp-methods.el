@@ -3,28 +3,6 @@
 (require 'cider-eval-form)
 (require 'oook-list-mode)
 
-;;;; functions to retrieve config from Clojure
-
-(defvar xdmp-servers
-  '(:rest-server (:host "localhost" :port "6000" :user "foo" :password "bar")
-    :xdbc-server (:host "localhost" :port "7000" :user "foo" :password "bar")))
-
-(defun xdmp-get-xdbc-server ()
-  (plist-get xdmp-servers :xdbc-server))
-
-(defun xdmp-get-rest-server ()
-  (plist-get xdmp-servers :rest-server))
-
-(defun xdmp-server-to-oook (server)
-  (setq oook-connection server))
-
-(defun xdmp-propagate-server-to-oook ()
-  (xdmp-server-to-oook (xdmp-get-xdbc-server)))
-
-;; make sure that oook has our current XDBC server configuration
-(xdmp-propagate-server-to-oook)
-
-
 ;;;; xdmp interface functions to query for databases
 
 (defun xdmp-get-current-database ()
@@ -40,7 +18,6 @@
 (defun xdmp-get-databases ()
   (oook-eval-sync "for $d in xdmp:databases() return xdmp:database-name($d)"))
 
-
 ;;;; functions to encapsulate the REST server for Clojure
 
 (defun xdmp-maybe-add-current-database (server)
@@ -49,13 +26,15 @@
     (append server (list :database (xdmp-get-current-database)))))
 
 (defun xdmp-rest-connection->clj ()
-  (oook-plist-to-map (xdmp-maybe-add-current-database (xdmp-get-rest-server))))
+  (oook-plist-to-map (xdmp-maybe-add-current-database oook-connection)))
 
 ;;;; functions to select databases
 
+(defvar xdmp-database-history nil)
+
 (defun xdmp-select-database (content-base)
   ;; also shows all databases because of the completion feature
-  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-default-database) 0))))
+  (interactive (list (completing-read (format "DB (default %s): " (xdmp-get-default-database)) (xdmp-get-databases) nil t nil 'xdmp-database-history (xdmp-get-default-database))))
   (setq oook-connection (plist-put oook-connection :content-base content-base)))
 
 (defun xdmp-select-default-database ()
@@ -116,8 +95,15 @@
 (defvar xdmp-document-history (list "/"))
 ;; idea: maybe use a separate history when temporarily switched to modules database (20160921 mgr)
 
-;; load document using xquery
-(defun xdmp-document-load/xquery (&optional directory)
+(defun xdmp-document-load/xdmp-document-load (&optional directory)
+  "load document using xdmp:document-load via xquery
+
+pro:
+ - does work with binary files as well
+con:
+ - loads the file from the file system, ignores changes in the buffer that are not stored yet
+ - needs file on the file system of the MarkLogic server
+   - so it works only when you have MarkLogic on the same host as Emacs (usually, your localhost)"
   (interactive
    (list
     (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
@@ -145,7 +131,48 @@ xdmp:document-load(\"%s\",
        (xdmp-set-buffer-database (xdmp-get-current-database))
        (xdmp-set-buffer-path directory)))))
 
-(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xquery))
+(defun xdmp-document-load/uruk-insert-string (&optional directory)
+  "load document using new uruk.core/insert-string method of Uruk 0.3.7
+
+pro:
+ - also works if MarkLogic is installed on another host then the one where your Emacs runs
+ - just uploads the current contents of the buffer even if it is has not been stored to disk yet
+ - works for XML, JSON, and text files
+con:
+ - does not work for binary files
+ - needs recent Uruk"
+  (interactive
+   (list
+    (let ((default (or xdmp-buffer-path (car xdmp-document-history))))
+      (read-string (format "Directory [%s]: " (or default "")) nil
+                   'xdmp-document-history
+                   default))))
+  (xdmp-with-database (xdmp-get-buffer-or-current-database)
+   (prog1
+       (let* ((filename (file-name-nondirectory (or (buffer-file-name) (buffer-name))))
+              (directory (if (not (string-equal "" directory))
+                             (file-name-as-directory directory)
+                           ""))
+              (server-uri (concat directory filename))
+              (eval-form (format "(let [host \"%s\"
+                                        port %s
+                                        db %s]
+                                    (with-open [session (uruk.core/create-default-session (uruk.core/make-hosted-content-source host port db))]
+                                      (doall (map str (uruk.core/insert-string session \"%%s\" \"%%s\")))))"
+                                 (plist-get oook-connection :host)
+                                 (plist-get oook-connection :port)
+                                 (oook-plist-to-map oook-connection)))
+              (form (format eval-form
+                            server-uri
+                            (replace-regexp-in-string "\"" "\\\\\""
+                                                      (replace-regexp-in-string "\\\\" "\\\\\\\\" (buffer-string)))))
+              (ns "uruk.core"))
+         (cider-eval-form form ns)))
+   (xdmp-set-buffer-database (xdmp-get-current-database))
+   (xdmp-set-buffer-path directory)))
+
+;; (fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xdmp-document-load))
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/uruk-insert-string))
 
 (defun xdmp-document-delete (&optional directory)
   (interactive
@@ -187,7 +214,7 @@ xdmp:document-delete(\"%s\")"
 
 (defun xdmp-set-buffer-database (database)
   ;; also shows all databases because of the completion feature
-  (interactive (list (completing-read "DB: " (xdmp-get-databases) nil t (cons (xdmp-get-buffer-or-current-database) 0))))
+  (interactive (list (completing-read (format "DB (default %s): " (xdmp-get-buffer-or-current-database)) (xdmp-get-databases) nil t nil 'xdmp-database-history (xdmp-get-buffer-or-current-database))))
   (make-local-variable 'xdmp-buffer-database)
   (setq xdmp-buffer-database database))
 
@@ -271,6 +298,11 @@ doc(\"%s\")"
   (interactive)
   (let ((uri (whitespace-delimited-thing-at-point)))
     (xdmp-show uri)))
+
+(defun xdmp-delete-this ()
+  (interactive)
+  (let ((uri (whitespace-delimited-thing-at-point)))
+    (xdmp-document-delete uri)))
 
 ;; (global-set-key (kbd "C-c C-u") 'xdmp-document-load)
 ;; (global-set-key (kbd "C-c C-d") 'xdmp-document-delete)

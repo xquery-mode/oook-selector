@@ -55,7 +55,7 @@ cat > uruk-gw/project.clj <<__EOL__
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [uruk "0.3.3"]]
+                 [uruk "0.3.9"]]
   :main ^:skip-aot uruk-gw.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
@@ -138,3 +138,52 @@ be transfered or delete open in a buffer. If you fire the command the
 filename will be taken from the buffer and you will be interactively
 queried to enter a directory path.  The file will be uploaded with a
 URI of `<directory>/<filename>`.  Delete works analogously.
+
+## Selection of Document Upload Implementation
+
+There are two implementations of xdmp-document-load. One is using
+xdmp:document-load, the other uruk.core/insert-string. Both
+variants have its pros and cons:
+
+## xdmp-document-load/xdmp-document-load
+
+pro:
+
+ - does work with binary files as well
+
+con:
+
+ - loads the file from the file system, ignores changes in the buffer that are not stored yet
+ - needs file on the file system of the MarkLogic server
+    - so it works only when you have MarkLogic on the same host as Emacs (usually, your localhost)
+
+## xdmp-document-load/uruk-insert-string
+load document using new uruk.core/insert-string method of Uruk 0.3.7
+
+pro:
+
+ - also works if MarkLogic is installed on another host then the one where your Emacs runs
+ - just uploads the current contents of the buffer even if it is has not been stored to disk yet
+ - works for XML, JSON, and text files
+
+con:
+
+ - does not work for binary files
+ - needs recent Uruk
+
+## Changing the default
+
+By default, the uruk-insert-string variant is selected as it has the big plus of working
+with remote MarkLogic servers and just uploads the current buffer contents.
+
+You might only want to change to the xdmp-document-load if, for example, you need to upload
+binary files such as images from Emacs directly.
+
+To change the default, add this in your `~/.emacs` or `~/.emacs.d/init.el`:
+```
+(fset 'xdmp-document-load (symbol-function 'xdmp-document-load/xdmp-document-load))
+```
+somewhere after the line that loads the Oook Selector:
+```
+(require 'oook-setup  "~/src/oook-selector/oook-setup")
+```

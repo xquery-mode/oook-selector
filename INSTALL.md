@@ -51,12 +51,9 @@ Put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 ```
 (require 'oook-setup  "~/src/oook-selector/oook-setup")
 
-;; default server configuration
-(setq xdmp-servers
-  '(:rest-server (:host "localhost" :port "8002" :user "admin" :password "admin")
-    :xdbc-server (:host "localhost" :port "8000" :user "admin" :password "admin")))
-;; make sure that oook has our current XDBC server configuration
-(xdmp-propagate-server-to-oook)
+;; default server configuration for oook
+(setq oook-connection
+  '(:host "localhost" :port "8002" :user "admin" :password "admin"))
 ```
 
 Note: `oook-setup` does some initialization in addition to just loading the
