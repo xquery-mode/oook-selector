@@ -18,9 +18,17 @@ put this in your `~/.emacs` or `~/.emacs.d/init.el`:
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 (package-initialize)
 ```
 call  `M-x package-refresh-contents`  and try again.
+
+Please note that we recommend to use the most recent stable version
+of Cider. If you want to use a more recent development version of
+Cider from melpa or GitHub, please have a look at [the notes on that
+of Oook](https://github.com/xquery-mode/oook#recommendation-of-using-cider-stable).
 
 #### Install Leiningen
 
