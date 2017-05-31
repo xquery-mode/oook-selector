@@ -30,6 +30,11 @@ of Cider. If you want to use a more recent development version of
 Cider from melpa or GitHub, please have a look at [the notes on that
 of Oook](https://github.com/xquery-mode/oook#recommendation-of-using-cider-stable).
 
+*If you see Oook and Oook Selector complaining "Namespace not found."
+it probably means, that you are not using Cider Stable or that you
+are using a more recent Cider version without [switching to the right
+branch of Oook](https://github.com/xquery-mode/oook#recommendation-of-using-cider-stable).*
+
 #### Install Leiningen
 
 To get [Leiningen](https://leiningen.org):
